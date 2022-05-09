@@ -1,0 +1,15 @@
+
+
+You're receiving this email because you requested a password reset for your user account at Ecommerce.
+
+Please go to the following page and choose a new password:
+
+http://127.0.0.1:8000{% url 'reset_password' id=user.id  %}
+
+Your username, in case you’ve forgotten: {{ user.username }}.
+
+Thanks for using our site!
+
+The Ecommerce team
+
+

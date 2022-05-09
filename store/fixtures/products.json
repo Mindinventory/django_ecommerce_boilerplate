@@ -1,0 +1,204 @@
+[
+  {
+    "model": "store.Category",
+    "pk": 1,
+    "fields": {
+      "name": "Mobile"
+    }
+  },
+  {
+    "model": "store.Category",
+    "pk": 2,
+    "fields": {
+      "name": "Clothes"
+    }
+  },
+  {
+    "model": "store.Category",
+    "pk": 3,
+    "fields": {
+      "name": "Electronics"
+    }
+  },
+  {
+    "model": "store.Category",
+    "pk": 4,
+    "fields": {
+      "name": "Home Appliances"
+    }
+  },
+  {
+    "model": "store.Category",
+    "pk": 5,
+    "fields": {
+      "name": "Mobile Accessories"
+    }
+  },
+  {
+    "model": "store.Brand",
+    "pk": 1,
+    "fields": {
+      "name": "Realme"
+    }
+  },
+  {
+    "model": "store.Brand",
+    "pk": 2,
+    "fields": {
+      "name": "H&M"
+    }
+  },
+  {
+    "model": "store.Brand",
+    "pk": 3,
+    "fields": {
+      "name": "Samsung"
+    }
+  },
+  {
+    "model": "store.Brand",
+    "pk": 4,
+    "fields": {
+      "name": "Dell"
+    }
+  },
+  {
+    "model": "store.Brand",
+    "pk": 5,
+    "fields": {
+      "name": "Boat"
+    }
+  },
+  {
+    "model": "store.Brand",
+    "pk": 6,
+    "fields": {
+      "name": "SkullCandy"
+    }
+  },
+  {
+    "model": "store.Brand",
+    "pk": 7,
+    "fields": {
+      "name": "Lenovo"
+    }
+  },
+  {
+    "model": "store.Brand",
+    "pk": 8,
+    "fields": {
+      "name": "Zara"
+    }
+  },
+  {
+    "model": "store.Brand",
+    "pk": 9,
+    "fields": {
+      "name": "Forever 21"
+    }
+  },
+  {
+    "model": "store.Product",
+    "pk": 1,
+    "fields": {
+      "name": "T-shirts",
+      "price": 575,
+      "qty": 42,
+      "description": "Linen material, comfortable",
+      "image": "uploads/products/Tshirts.png",
+      "category": 2,
+      "brand": 2
+    }
+  },
+  {
+    "model": "store.Product",
+    "pk": 2,
+    "fields": {
+      "name": "Laptop",
+      "price": 84700,
+      "qty": 47,
+      "description": "Intel processor,  highly memory saving, enormous storage",
+      "image": "uploads/products/LAptop.png",
+      "category": 3,
+      "brand": 4
+    }
+  },
+  {
+    "model": "store.Product",
+    "pk": 3,
+    "fields": {
+      "name": "TV",
+      "price": 2300,
+      "qty": 89,
+      "description": "Ultravision, eye protection and smooth display",
+      "image": "uploads/products/TV.png",
+      "category": 4,
+      "brand": 3
+    }
+  },
+  {
+    "model": "store.Product",
+    "pk": 4,
+    "fields": {
+      "name": "Headphone",
+      "price": 12000,
+      "qty": 25,
+      "description": "Good quality headphones with amazing hearing abilites",
+      "image": "uploads/products/HP.png",
+      "category": 5,
+      "brand": 5
+    }
+  },
+  {
+    "model": "store.Product",
+    "pk": 5,
+    "fields": {
+      "name": "Wireless headset",
+      "price": 15000,
+      "qty": 100,
+      "description": "Wireless headset with boosting sound and quality",
+      "image": "uploads/products/headset.png",
+      "category": 5,
+      "brand": 6
+    }
+  },
+  {
+    "model": "store.Product",
+    "pk": 6,
+    "fields": {
+      "name": "Powerbank",
+      "price": 2000,
+      "qty": 150,
+      "description": "Superfast charging with 2 years of functional warranty",
+      "image": "uploads/products/PB_inb3I2R.png",
+      "category": 5,
+      "brand": 1
+    }
+  },
+  {
+    "model": "store.Product",
+    "pk": 7,
+    "fields": {
+      "name": "Tops",
+      "price": 2000,
+      "qty": 150,
+      "description": "Cotton material, flexible and stylish",
+      "image": "uploads/products/top.png",
+      "category": 2,
+      "brand": 8
+    }
+  },
+  {
+    "model": "store.Product",
+    "pk": 8,
+    "fields": {
+      "name": "Laptop",
+      "price": 25000,
+      "qty": 300,
+      "description": "Cotton material, flexible and stylish",
+      "image": "uploads/products/laptop1.png",
+      "category": 3,
+      "brand": 7
+    }
+  }
+]

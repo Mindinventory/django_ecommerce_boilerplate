@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block title %}Sign Up{% endblock title %}
+{% load static %}
+
+{% block content %}
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+            <div class="col-first">
+                <h1>Sign up</h1>
+                <nav class="d-flex align-items-center">
+                    <a href="{% url 'home' %}">Home<span class="lnr lnr-arrow-right"></span></a>
+                    <a href="{% url 'register' %}">Sign up</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Banner Area -->
+
+<!--================Register Box Area =================-->
+<section class="login_box_area section_gap">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="login_box_img">
+                    <img class="img-fluid" src="{% static 'img/login.jpg' %}" alt="">
+                    <div class="hover">
+                        <h4>Have an account?</h4>
+                        <p>There are advances being made in science and technology everyday, and a good example of this
+                            is the</p>
+                        <a class="primary-btn" href="{% url 'login' %}">Login</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="login_form_inner p-1">
+                    <h3>Sign up</h3>
+                    <form class="row register_form" method="post" id="contactForm" novalidate="novalidate">
+                        {% csrf_token %}
+                        <div class="col-md-12 form-group">
+                            {{ form.first_name }}
+                            <div class='error text-danger'>{{form.first_name.errors}}</div>
+
+                        </div>
+                        <div class="col-md-12 form-group">
+                            {{ form.last_name }}
+                            <div class='error text-danger'>{{form.last_name.errors}}</div>
+
+                        </div>
+                        <div class="col-md-12 form-group">
+                            {{ form.username }}
+                            <div class='error text-danger'>{{form.username.errors}}</div>
+
+                        </div>
+                        <div class="col-md-12 form-group">
+                            {{ form.mobile_no }}
+                            <div class='error text-danger'>{{form.mobile_no.errors}}</div>
+
+                        </div>
+                        <div class="col-md-12 form-group">
+                            {{ form.alt_mobile_no }}
+                            <div class='error text-danger'>{{form.alt_mobile_no.errors}}</div>
+
+                        </div>
+                        <div class="col-md-12 form-group">
+                            {{ form.email }}
+                            <div class='error text-danger'>{{form.email.errors}}</div>
+
+                        </div>
+                        <div class="col-md-12 form-group">
+                            {{ form.password1 }}
+                            <div class='error text-danger'>{{form.password1.errors}}</div>
+
+                        </div>
+                        <div class="col-md-12 form-group">
+                            {{ form.password2 }}
+                            <div class='error text-danger'>{{form.password2.errors}}</div>
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <button type="submit" value="submit" class="primary-btn">Sign up</button>
+                        </div>
+                        <p class="pt-4 pl-4">Already have an account? <a href="{% url 'login' %}">Login</a></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--================End Register Box Area =================-->
+
+{% endblock content %}
