@@ -44,7 +44,7 @@ def login(request):
             user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
             if user is not None:
                 auth_login(request, user)
-                logger.info("User with name  {0} logged in successfully".format(user.username))
+                logger.info("User with name {0} logged in successfully".format(user.username))
                 return redirect("home")
             logger.info("User entered invalid login credentials")
             messages.error(request, message="Invalid login credentials")

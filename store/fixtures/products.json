@@ -80,7 +80,7 @@
     "model": "store.Brand",
     "pk": 7,
     "fields": {
-      "name": "Lenovo"
+      "name": "Apple"
     }
   },
   {

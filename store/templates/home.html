@@ -36,9 +36,10 @@
 						</div>
 						<h6><span>In stock : </span>{{product.qty}}</h6>
 						<div class="prd-bottom">
-							<a href="{% url 'product_detail' product.id %}"
-								class="primary-btn ">View <span class="ti-eye"></span></a>
+							<button data-id="{{product.id}}" data-action='add' data-image="{{product.image}}" data-price="{{product.price}}"
+								class="primary-btn update-cart">Add to <span class="ti-bag"></span></button>
 						</div>
+
 					</div>
 				</div>
 		</div>

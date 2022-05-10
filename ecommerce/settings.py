@@ -124,7 +124,6 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 CELERY_BROKER_URL = ''
-
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 
@@ -134,6 +133,9 @@ EMAIL_HOST_USER = 'rutvi.vora@mindinventory.com'
 EMAIL_HOST_PASSWORD = 'Rutvi@105*'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
+
+STRIPE_PUBLISHABLE_KEY = 'pk_test_51Kt3dsSIztlc64UQGz07uBSAgVNWFx1kWIsf2FCu2NvzHVlfH4dRRiojAbTLi1sXORU3cRbeFb899uRRfmQpAYlw00TUMgAHsy'
+STRIPE_SECRET_KEY = 'sk_test_51Kt3dsSIztlc64UQ4gyUQzCcF0xn5z7w7HFAfeYPMN9fCChnxBj1WWWo1O4nFQA1hLK0eyislOvycfV99GCX8opQ00shICjKdv'
 
 # Logging configuration
 LOGGING = {

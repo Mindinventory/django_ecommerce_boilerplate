@@ -4,77 +4,81 @@
 {% load static %}
 
 
-	<!-- Start Banner Area -->
-	<section class="banner-area organic-breadcrumb">
-		<div class="container">
-			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
-				<div class="col-first">
-					<h1>Product Details Page</h1>
-					<nav class="d-flex align-items-center">
-						<a href="{% url 'home' %}">Home<span class="lnr lnr-arrow-right"></span></a>
-						<a href="#">Product-details</a>
-					</nav>
-				</div>
-			</div>
-		</div>
-	</section>
-	<!-- End Banner Area -->
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+            <div class="col-first">
+                <h1>Product Details Page</h1>
+                <nav class="d-flex align-items-center">
+                    <a href="{% url 'home' %}">Home<span class="lnr lnr-arrow-right"></span></a>
+                    <a href="#">Product-details</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Banner Area -->
 
-	<!--================Single Product Area =================-->
-	<div class="product_image_area mb-5">
-		<div class="container">
-			<div class="row s_product_inner">
-				<div class="col-lg-6">
-						<div class="single-prd-item">
-							<img class="img-fluid" src="{{product.image.url}}" alt="" style="width:500px; height:500px;">
-					</div>
-				</div>
-				<div class="col-lg-5 offset-lg-1">
-					<div class="s_product_text">
-						<h3>{{product.name}}</h3>
-						<h3>{{product.brand.name}}</h3>
-						<h2><span>&#8377; </span>{{product.price}}</h2>
-						<ul class="list">
-							<li><a class="active" href="#"><span>Category</span>{{product.category.name}}</a></li>
-							<li><a href="#"><span>In Stock:</span>{{product.qty}}</a></li>
-						</ul>
-						<p>{{product.description}}</p>
-						<div class="prd-bottom">
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!--================End Single Product Area =================-->
+<!--================Single Product Area =================-->
+<div class="product_image_area mb-5">
+    <div class="container">
+        <div class="row s_product_inner">
+            <div class="col-lg-6">
+                <div class="single-prd-item">
+                    <img class="img-fluid" src="{{product.image.url}}" alt="" style="width:500px; height:500px;">
+                </div>
+            </div>
+            <div class="col-lg-5 offset-lg-1">
+                <div class="s_product_text">
+                    <h3>{{product.name}}</h3>
+                    <h3>{{product.brand.name}}</h3>
+                    <h2><span>&#8377; </span>{{product.price}}</h2>
+                    <ul class="list">
+                        <li><a class="active" href="#"><span>Category</span>{{product.category.name}}</a></li>
+                        <li><a href="#"><span>In Stock:</span>{{product.qty}}</a></li>
+                    </ul>
+                    <p>{{product.description}}</p>
+                    <div class="prd-bottom">
+                        <button data-id="{{product.id}}" data-action='add' data-image="{{product.image}}" data-price="{{product.price}}"
+                                class="primary-btn update-cart">Add to <span class="ti-bag"></span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--================End Single Product Area =================-->
 
-	<div class="container my-5 py-5">
-		<h1 class="text-center ">Similar Products</h1>
-		<section class="lattest-product-area pb-40 category-list">
-			<div class="row mx-auto">
+<div class="container my-5 py-5">
+    <h1 class="text-center ">Similar Products</h1>
+    <section class="lattest-product-area pb-40 category-list">
+        <div class="row mx-auto">
 
-				{% for product in categories %}
-				<div class="col-lg-3 col-md-6">
-						<div class="single-product mx-auto">
-							<a href="{% url 'product_detail' product.id %}">
-							<img class="img-fluid" src="{{product.image.url}}" alt=""
-								style="width:100%; height:250px;">
-							</a>
-							<div class="product-details">
-								<h6>{{product.name}}</h6>
-								<h6>{{product.brand.name}}</h6>
-								<div class="price">
-									<h6><span>&#8377; </span>{{product.price}}</h6>
-								</div>
-								<h6><span>In stock : </span>{{product.qty}}</h6>
-								<div class="prd-bottom">
-								</div>
-							</div>
-						</div>
-				</div>
-				{% endfor %}
-			</div>
-		</section>
-	</div>
+            {% for product in categories %}
+            <div class="col-lg-3 col-md-6">
+                <div class="single-product mx-auto">
+                    <a href="{% url 'product_detail' product.id %}">
+                        <img class="img-fluid" src="{{product.image.url}}" alt=""
+                             style="width:100%; height:250px;">
+                    </a>
+                    <div class="product-details">
+                        <h6>{{product.name}}</h6>
+                        <h6>{{product.brand.name}}</h6>
+                        <div class="price">
+                            <h6><span>&#8377; </span>{{product.price}}</h6>
+                        </div>
+                        <h6><span>In stock : </span>{{product.qty}}</h6>
+                        <div class="prd-bottom">
+                        <button data-id="{{product.id}}" data-action='add' data-image="{{product.image}}" data-price="{{product.price}}"
+                                class="primary-btn update-cart">Add to <span class="ti-bag"></span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
 
-	{% endblock %}
+{% endblock %}

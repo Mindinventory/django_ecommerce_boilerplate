@@ -36,6 +36,10 @@ Configure Database settings in settings.py folder as suggested in below document
 ````
 https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 ````
+
+Create a .env file in the project folder.
+You can find .env.example file for your reference.
+
 Execute below command to create migrations and register models in the database:
 
 ````

@@ -57,11 +57,6 @@ class LoginForm(AuthenticationForm):
                                           'placeholder': 'Password'}))
 
 
-
-
-
-
-
 class EditProfileForm(forms.Form):
     first_name = forms.CharField(max_length=30,
                                  widget=forms.TextInput(attrs={"class": 'form-control', 'placeholder': 'First name',

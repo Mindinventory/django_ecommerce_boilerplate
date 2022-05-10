@@ -68,17 +68,11 @@
         }
 
 
-
-
-
     </script>
     <script>
-        setTimeout(function(){
-   $(".message").fadeOut("slow");
-}, 3000);
-
-
-
+        setTimeout(function () {
+            $(".message").fadeOut("slow");
+        }, 3000);
 
 
     </script>
@@ -104,6 +98,18 @@
                 <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
                     <ul class="nav navbar-nav menu_nav ml-auto">
                         <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+                        <li class="nav-item submenu dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
+                               aria-haspopup="true" aria-expanded="false">Shop</a>
+                            <ul class="dropdown-menu">
+                                <li class="nav-item"><a class="nav-link" href="{% url 'categories' %}">Shop By
+                                    Category</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{% url 'cart' %}">Shopping Cart</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{% url 'checkout' %}">Product
+                                    Checkout</a>
+                                </li>
+                            </ul>
+                        </li>
 
                         <li class="nav-item submenu dropdown active">
                             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
@@ -123,6 +129,21 @@
                         </li>
 
                     </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="nav-item"><a href="{% url 'cart' %}" class="cart"><span class="ti-bag"><span
+                                class="bg-warning p-1">{{cartItems}}</span>
+							</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <form class="form-inline my-2 my-lg-0" action="/search/" method="GET">
+                                <input class="form-control mr-sm-2" type="search" placeholder="Search" name="q"
+                                       aria-label="Search">
+                                <button class="search"><span class="lnr lnr-magnifier" id="search"
+                                                             type="submit"></span></button>
+                            </form>
+                        </li>
+                    </ul>
+
 
                 </div>
             </div>
@@ -134,6 +155,11 @@
 {% block content %} {% endblock content %}
 {% block javascript %} {% endblock javascript %}
 
+
+<br>
+<br>
+<br>
+<br>
 <!-- start footer Area -->
 <footer class="footer-area section_gap">
     <div class="container">
