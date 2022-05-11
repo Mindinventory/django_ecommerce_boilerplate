@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block title %}Categories{% endblock title %}
+{% load static %}
+{% load custom_tags %}
+
+
+{% block content %}
+
+
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+	<div class="container">
+		<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+			<div class="col-first">
+				<h1>Product Category page</h1>
+				<nav class="d-flex align-items-center">
+					<a href="{% url 'home' %}">Home<span class="lnr lnr-arrow-right"></span></a>
+					<a href="{% url 'categories' %}">Product Category</a>
+				</nav>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- End Banner Area -->
+<div class="container">
+	<div class="row">
+		<div class="col-xl-3 col-lg-4 col-md-5">
+			<div class="sidebar-categories">
+				<div class="head">Browse Categories</div>
+				<ul class="main-categories">
+					{% for category in categories %}
+					<li class="main-nav-list"><a href="{% url 'product_by_category' pk=category.id %}">{{category.name}}</a>
+					</li>
+					{% endfor %}
+				</ul>
+			</div>
+			<div class="sidebar-categories mt-50">
+				<div class="sidebar-categories">
+					<div class="head">Brands</div>
+					<ul class="main-categories">
+						{% for brand in brands %}
+						<li class="main-nav-list"><a href="{% url 'product_by_brand' pk=brand.id %}">
+								{{brand.name}}</a>
+						</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="col-xl-9 col-lg-8 col-md-7">
+							<!-- Start Filter Bar -->
+							<div class="filter-bar d-flex flex-wrap align-items-center">
+								<div class="sorting mr-5">
+									<a href="/category/?short=name" class="text-white">Name</a>
+								</div>
+								<div class="sorting mx-5">
+									<a href="/category/?short=price" class="text-white">Price low to high</a>
+								</div>
+								<div class="sorting mx-5">
+									<a href="/category/?short=-price" class="text-white">Price high to low</a>
+								</div>
+							</div>
+							<!-- End Filter Bar -->
+			<section class="lattest-product-area pb-40 category-list">
+				<div class="row mx-auto">
+					{% for product in products %}
+					<div class="col-lg-4 col-md-6">
+
+						<div class="single-product mx-auto">
+							<a href="{% url 'product_detail' product.id %}">
+								<img class="img-fluid" src="{{product.image.url}}" alt=""
+									style="width:100%; height:250px;">
+							</a>
+							<div class="product-details">
+								<h6>{{product.name}}</h6>
+								<h6>{{product.brand.name}}</h6>
+								<div class="price">
+									<h6><span>&#8377; </span>{{product.price|number_format}}</h6>
+								</div>
+								<h6><span>In stock : </span>{{product.qty}}</h6>
+
+								<div class="prd-bottom">
+									<button data-product={{product.id}} data-action='add'
+										class="primary-btn update-cart">Add to <span class="ti-bag"></span></button>
+								</div>
+							</div>
+						</div>
+					</div>
+					{% endfor %}
+				</div>
+			</section>
+		</div>
+	</div>
+</div>
+{% endblock content %}

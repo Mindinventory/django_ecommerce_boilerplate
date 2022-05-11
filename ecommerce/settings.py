@@ -129,13 +129,13 @@ CELERY_TASK_SERIALIZER = 'json'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'rutvi.vora@mindinventory.com'
-EMAIL_HOST_PASSWORD = 'Rutvi@105*'
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 
-STRIPE_PUBLISHABLE_KEY = 'pk_test_51Kt3dsSIztlc64UQGz07uBSAgVNWFx1kWIsf2FCu2NvzHVlfH4dRRiojAbTLi1sXORU3cRbeFb899uRRfmQpAYlw00TUMgAHsy'
-STRIPE_SECRET_KEY = 'sk_test_51Kt3dsSIztlc64UQ4gyUQzCcF0xn5z7w7HFAfeYPMN9fCChnxBj1WWWo1O4nFQA1hLK0eyislOvycfV99GCX8opQ00shICjKdv'
+STRIPE_PUBLISHABLE_KEY = os.environ.get('STRIPE_PUBLISHABLE_KEY')
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
 
 # Logging configuration
 LOGGING = {
@@ -158,7 +158,4 @@ LOGGING = {
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 
-# TODO put designer html pages in email and else required
-
-# TODO organize email templates inside project directory
 

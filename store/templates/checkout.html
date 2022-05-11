@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% block title %}Checkout{% endblock %}
+{% load static %}
+{% load custom_tags %}
+
+
+{% block content %}
+
+
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+            <div class="col-first">
+                <h1>Checkout</h1>
+                <nav class="d-flex align-items-center">
+                    <a href="{% url 'home' %}">Home<span class="lnr lnr-arrow-right"></span></a>
+                    <a href="{% url 'checkout' %}">Checkout</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Banner Area -->
+
+<!--================Checkout Area =================-->
+<section class="checkout_area section_gap">
+    <div class="container px-5">
+        <div class="billing_details">
+            <div class="row px-5">
+                <div class="col-lg-8 pl-5">
+                    <h3 class="p-4">Billing Details</h3>
+
+                    <div class="col-lg-50">
+                        <div class="order_box">
+
+                            <ul class="list list_2">
+                                <li><a href="#">Name <span style="text-transform: none !important;">{{ user.first_name }} {{ user.last_name }}</span></a>
+                                </li>
+                                <li><a href="#">UserName<span style="text-transform: none !important;"> {{ user.username }}</span></a>
+                                </li>
+                                <li><a href="#">Email <span
+                                        style="text-transform: none !important;"> {{ user.email }}</span></a></li>
+                                <li><a href="#">Mobileno <span style="text-transform: none !important;"> {{ user.user_profile.alt_mobile_no }} </span></a>
+                                </li>
+                                <li><a href="#">Alt Mobileno <span style="text-transform: none !important;"> {{ user.user_profile.alt_mobile_no }} </span></a>
+                                </li>
+                                <li><a href="#">Address1 <span style="text-transform: none !important;"> {{ user.user_shipping_address.address_one }} </span></a>
+                                </li>
+                                <li><a href="#">Address2 <span style="text-transform: none !important;"> {{ user.user_shipping_address.address_two }} </span></a>
+                                </li>
+                                <li><a href="#">Zipcode <span style="text-transform: none !important;"> {{ user.user_shipping_address.zipcode }} </span></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-lg-4">
+                    <div class="order_box">
+                        <h2>Your Order</h2>
+                        <ul class="list">
+                            <li><a href="#">Product <span>Total</span></a></li>
+                            {% for item in items %}
+                            <li><a href="#">{{item.product.name}}<span class="middle">x {{item.quantity}}</span>
+                                <span class="last">&#8377; {{item.get_total|number_format}}</span></a></li>
+                            {% endfor %}
+                        </ul>
+
+                        <ul class="list list_2">
+                            <li><a href="#">Subtotal <span>&#8377; 0</span></a></li>
+                            <li><a href="#">GST(18%)<span>&#8377; 0</span></a></li>
+                            <li><a href="#">Discount <span>&#8377; 0</span></a></li>
+                            <li><a href="#">Total <span>&#8377; {{ sum|number_format }} </span></a></li>
+                        </ul>
+                        <a class="primary-btn removeCartItem" data-toggle="modal" data-target="#myModal"
+                           href="{% url 'confirmation' %}">Confirm Order</a>
+
+                        <!-- The Modal -->
+                        <div class="modal fade" id="myModal">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+
+
+                                    <!-- Modal Header -->
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Your order has been placed. Please proceed to payment
+                                            below and you will receive a confirmation email.</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+
+                                    <!-- Modal body -->
+                                    <div class="modal-body">
+                                        <script src="https://checkout.stripe.com/checkout.js"
+                                                class="stripe-button clear-cart"
+                                                data-key="{{ key }}"
+                                                data-description="A Django Charge"
+                                                data-amount="{{ sum }}"
+                                                data-locale="auto"
+                                                data-url_root="{% url 'clear_cart' %}">
+
+                                            $.ajax({
+                                                url: $('.stripe-button').data('url_root'),
+                                                headers: {'X-CSRFToken': csrftoken},
+                                                mode: 'same-origin',
+                                                success: function (response) {
+                                                    data = response;
+
+
+                                                }
+                                            })
+                                        </script>
+                                    </div>
+
+                                    <!-- Modal footer -->
+                                    <div class="modal-footer">
+                                        <a class="primary-btn"
+                                           href="{% url 'home' %}">Continue Shopping</a>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--================End Checkout Area =================-->
+
+{% endblock %}
+
+

@@ -5599,7 +5599,7 @@ label {
   .contact_form .form-group .form-control {
     font-size: 13px;
     line-height: 26px;
-    color: #999;
+    color: black;
     border: 1px solid #eeeeee;
     font-family: "Roboto", sans-serif;
     border-radius: 0px;
@@ -5614,7 +5614,7 @@ label {
     .contact_form .form-group .form-control::-moz-placeholder {
       color: #999; }
     .contact_form .form-group .form-control::-webkit-input-placeholder {
-      color: #999; }
+      color: #beb6b6; }
   .contact_form .form-group textarea {
     resize: none; }
     .contact_form .form-group textarea.form-control {

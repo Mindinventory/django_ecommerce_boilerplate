@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 
 from ecommerce.email.email import send_mail_from_system
 from ecommerce.settings import EMAIL_HOST_USER
+from store.utils import cookieCart
 from users.forms import UserRegisterForm, EditProfileForm, LoginForm, ForgotPasswordForm, \
     ResetPasswordForm, ChangePasswordForm
 from users.models import Profile, ShippingAddress, ForgotPassword
@@ -21,9 +22,8 @@ def register(request):
         if form.is_valid():
             obj = form.save()
             if form.cleaned_data['mobile_no'] or form.cleaned_data['alt_mobile_no']:
-                Profile.objects.create(user=obj, mobile=form.cleaned_data.get('mobile_no', None),
+                Profile.objects.create(user=obj, mobile_no=form.cleaned_data.get('mobile_no', None),
                                        alt_mobile_no=form.cleaned_data.get('alt_mobile_no', None))
-
             logger.info("User registered successfully")
             return redirect("login")
         return render(request, "registration.html", {"form": form})
@@ -40,6 +40,8 @@ def login(request):
         if request.user.is_authenticated:
             return redirect("home")
         form = LoginForm(request=request, data=request.POST or None)
+        cookieData = cookieCart(request)
+        cartItems = cookieData['cartItems']
         if form.is_valid():
             user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
             if user is not None:
@@ -48,13 +50,13 @@ def login(request):
                 return redirect("home")
             logger.info("User entered invalid login credentials")
             messages.error(request, message="Invalid login credentials")
-            return render(request, template_name="login.html", context={'form': form})
+            return render(request, template_name="login.html", context={'form': form, "cartItems": cartItems})
         if form.errors:
             messages.error(request, message="Invalid login credentials")
-        return render(request, "login.html", {"form": form})
+        return render(request, "login.html", {"form": form, "cartItems": cartItems})
     except Exception as ex:
         logger.info("Exception raised in logging in  user -- {0}".format(ex.args))
-        return render(request, template_name="login.html", context={"form": form})
+        return render(request, template_name="login.html", context={"form": form, "cartItems": cartItems})
 
 
 @login_required(login_url="login")
@@ -87,7 +89,7 @@ def edit_profile(request):
                 'username'), form.cleaned_data.get('email')
             request.user.save()
             Profile.objects.update_or_create(user=request.user,
-                                             defaults={"mobile_no": form.cleaned_data.get('alt_mobile_no'),
+                                             defaults={"mobile_no": form.cleaned_data.get('mobile_no'),
                                                        "alt_mobile_no": form.cleaned_data.get('alt_mobile_no')})
             ShippingAddress.objects.update_or_create(user=request.user, defaults={"address_one": form.cleaned_data.get(
                 'address_one'), "address_two": form.cleaned_data.get('address_two'),

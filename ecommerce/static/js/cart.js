@@ -6,16 +6,21 @@ for (var i = 0; i < updateBtns.length; i++) {
         var image = this.dataset.product
         var action = this.dataset.action
         var price = this.dataset.price
-        console.log('productId:',productId,'image:', image, 'action:', action, 'price:',price)
+        console.log('productId:', productId, 'image:', image, 'action:', action, 'price:', price)
 
         console.log('USER:', user)
-        addCookieItem(productId,image, price, action)
+        addCookieItem(productId, image, price, action)
 
     })
 }
 
-function addCookieItem(productId,image, price, action) {
-    console.log('Not logged in..')
+document.getElementsByClassName('clear-cart').onclick = function (){
+        localStorage.clear()
+        location.reload()
+}
+
+
+function addCookieItem(productId, image, price, action) {
 
     if (action == 'add') {
         if (cart[productId] == undefined) {
@@ -40,28 +45,6 @@ function addCookieItem(productId,image, price, action) {
 }
 
 
-function updateUserOrder(productId, action) {
-    console.log('User is logged in, sending data...')
 
-    var url = '/update_item/'
-
-    return fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrftoken,
-        },
-        body: JSON.stringify({'productId': productId, 'action': action})
-    })
-
-        .then((response) => {
-            return response.json();
-        })
-
-        .then((data) => {
-            console.log('data:', data);
-            location.reload()
-        })
-}
 
 

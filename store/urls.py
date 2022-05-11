@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import path
 
 from store.views import HomeView, ProductDetailView, CategoryView, ProductByCategoryView, ProductByBrandView, CartView, \
-    Checkout, Confirmation
+    SearchView, CheckoutView, ConfirmationView, ClearCartView
 
 urlpatterns = [
     path('', login_required(HomeView.as_view(), login_url='login'), name='home'),
@@ -13,7 +13,9 @@ urlpatterns = [
     path('brand/<int:pk>/product/', login_required(ProductByBrandView.as_view(), login_url='login'),
          name='product_by_brand'),
     path('cart/', login_required(CartView.as_view()), name='cart'),
-    path('checkout/', Checkout.as_view(), name='checkout'),
-    path('confirmation/', Confirmation.as_view(), name='confirmation'),
+    path('search/', login_required(SearchView.as_view()), name='search'),
+    path('checkout/', CheckoutView.as_view(), name='checkout'),
+    path('confirmation/', ConfirmationView.as_view(), name='confirmation'),
+    path('clear/cart/', ClearCartView.as_view(), name='clear_cart'),
 
 ]

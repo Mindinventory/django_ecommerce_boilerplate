@@ -1,12 +1,12 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import redirect
 from django.views import View
 from django.views.generic import DetailView, ListView, TemplateView
 
 from ecommerce.settings import STRIPE_PUBLISHABLE_KEY
-from users.forms import EditProfileForm
-from .models import Product, Category, Brand, Order, OrderItem
+from .models import Product, Category, Brand
 from .tasks import send_email_task
 from .utils import cookieCart
 
@@ -18,7 +18,23 @@ class HomeView(TemplateView):
         cookieData = cookieCart(self.request)
         cartItems = cookieData['cartItems']
 
-        data = {'products': Product.objects.all().order_by('-qty')[:20], 'cartItems': cartItems}
+        data = {'products': Product.objects.all().order_by('name'), 'cartItems': cartItems}
+        return data
+
+
+class SearchView(ListView):
+    template_name = 'home.html'
+    model = Product
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        kw = self.request.GET.get('query')
+        products = Product.objects.filter(
+            Q(name__icontains=kw) | Q(category__name__icontains=kw) | Q(brand__name__icontains=kw)).order_by('name')
+        cookieData = cookieCart(self.request)
+        cartItems = cookieData['cartItems']
+
+        data = {'products': products, 'cartItems': cartItems}
         return data
 
 
@@ -60,7 +76,7 @@ class CategoryView(ListView):
 
 class ProductByCategoryView(DetailView):
     model = Product
-    template_name = "product_by_category.html"
+    template_name = "category.html"
 
     def get_object(self, queryset=None):
         products = self.get_queryset().filter(category=self.kwargs["pk"]).order_by('name')
@@ -77,7 +93,7 @@ class ProductByCategoryView(DetailView):
 
 class ProductByBrandView(DetailView):
     model = Product
-    template_name = "product_by_brand.html"
+    template_name = "category.html"
 
     def get_object(self, queryset=None):
         products = self.get_queryset().filter(brand=self.kwargs["pk"]).order_by('name')
@@ -103,7 +119,7 @@ class CartView(TemplateView):
         return data
 
 
-class Checkout(LoginRequiredMixin, TemplateView):
+class CheckoutView(LoginRequiredMixin, TemplateView):
     template_name = "checkout.html"
 
     def get_context_data(self, **kwargs):
@@ -116,14 +132,28 @@ class Checkout(LoginRequiredMixin, TemplateView):
         data = {"user": self.request.user,
                 "cartItems": cartItems, "items": items,
                 "key": STRIPE_PUBLISHABLE_KEY,
-                "sum":sum
+                "sum": sum
                 }
         return data
 
 
-class Confirmation(LoginRequiredMixin, View):
+class ConfirmationView(View):
 
     def get(self, request, *args, **kwargs):
         send_email_task(request)
-
         return redirect('home')
+
+
+class ClearCartView(View):
+    def get(self, request, *args, **kwargs):
+        cookieData = cookieCart(request)
+        items = cookieData['items']
+        for item in items:
+            quantity = item.get('product').get('quantity')
+            productId = item.get('product').get('productId')
+            obj = Product.objects.get(id=productId)
+            avai = obj.qty - quantity
+            obj.update(qty=avai)
+
+
+
