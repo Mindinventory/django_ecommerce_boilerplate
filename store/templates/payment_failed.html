@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="jumbotron text-center mt-5">
+        <h1 class="text-danger">Payment Failed</h1>
+        <p>We received your order. You can now close this window or use the
+            link below to visit
+             <button class="clear-cart" onclick="myFunction()">Back to home</button>.
+        </p>
+    </div>
+</div>
+{% endblock content %}
+
+
+{% block javascript %}
+<script>
+function myFunction(){
+        localStorage.clear()
+        location.reload()
+}
+</script>
+{% endblock javascript %}

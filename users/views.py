@@ -18,6 +18,8 @@ def register(request):
         Registers new user in the system and redirects them to the login page.
     """
     try:
+        cookieData = cookieCart(request)
+        cartItems = cookieData['cartItems']
         form = UserRegisterForm(request.POST or None)
         if form.is_valid():
             obj = form.save()
@@ -26,10 +28,10 @@ def register(request):
                                        alt_mobile_no=form.cleaned_data.get('alt_mobile_no', None))
             logger.info("User registered successfully")
             return redirect("login")
-        return render(request, "registration.html", {"form": form})
+        return render(request, "registration.html", {"form": form,"cartItems":cartItems})
     except Exception as ex:
         logger.info("Exception raised in registering user -- {0}".format(ex.args))
-        return render(request, template_name="registration.html", context={"form": form})
+        return render(request, template_name="registration.html", context={"form": form,"cartItems":cartItems})
 
 
 def login(request):
@@ -65,6 +67,8 @@ def edit_profile(request):
         Allows user to view and edit profile.
     """
     try:
+        cookieData = cookieCart(request)
+        cartItems = cookieData['cartItems']
         form = EditProfileForm(request.POST or None,
                                initial={
                                    "first_name": request.user.first_name,
@@ -96,10 +100,10 @@ def edit_profile(request):
                 "zipcode": form.cleaned_data.get('zipcode')})
             logger.info("Profile of user with name {0} edited successfully".format(request.user.username))
             return redirect('home')
-        return render(request, 'edit_profile.html', {"form": form})
+        return render(request, 'edit_profile.html', {"form": form,"cartItems":cartItems})
     except Exception as ex:
         logger.info("Exception raised in editing profile-- {0}".format(ex.args))
-        return render(request, template_name="edit_profile.html", context={"form": form})
+        return render(request, template_name="edit_profile.html", context={"form": form,"cartItems":cartItems})
 
 
 @login_required(login_url="login")
@@ -108,6 +112,8 @@ def change_password(request):
         Allows user to change password and allow login with new password.
     """
     try:
+        cookieData = cookieCart(request)
+        cartItems = cookieData['cartItems']
         form = ChangePasswordForm(request.user, request.POST or None)
         if form.is_valid():
             user = form.save()
@@ -115,10 +121,10 @@ def change_password(request):
             update_session_auth_hash(request, user)
             logger.info("Password of user with name {0} changed successfully".format(request.user.username))
             return redirect('login')
-        return render(request, "change_password.html", {"form": form})
-    except ArithmeticError as ex:
+        return render(request, "change_password.html", {"form": form,"cartItems":cartItems})
+    except Exception as ex:
         logger.info("Exception raised in changing password - {0}".format(ex.args))
-        return render(request, template_name="change_password.html", context={"form": form})
+        return render(request, template_name="change_password.html", context={"form": form,"cartItems":cartItems})
 
 
 def forgot_password(request):
@@ -126,6 +132,8 @@ def forgot_password(request):
         Sends an email with one-use only reset password link to user.
     """
     try:
+        cookieData = cookieCart(request)
+        cartItems = cookieData['cartItems']
         form = ForgotPasswordForm(request.POST or None)
         if form.is_valid():
             user = get_object_or_404(User, email=form.cleaned_data["email"])
@@ -137,15 +145,17 @@ def forgot_password(request):
                              message="An email with reset password link is sent to you. Please check your inbox.",
                              )
             return redirect('login')
-        return render(request, template_name="forgot_password.html", context={"form": form})
+        return render(request, template_name="forgot_password.html", context={"form": form,"cartItems":cartItems})
     except ArithmeticError as ex:
         logger.info("Exception raised in sending reset password link  -- {0}".format(ex.args))
-        return render(request, template_name="forgot_password.html", context={"form": form})
+        return render(request, template_name="forgot_password.html", context={"form": form,"cartItems":cartItems})
 
 
 def reset_password(request, id):
     user = get_object_or_404(User, pk=id)
     try:
+        cookieData = cookieCart(request)
+        cartItems = cookieData['cartItems']
         if ForgotPassword.objects.filter(user=user).exists():
             form = ResetPasswordForm(user, request.POST or None)
             if form.is_valid():
@@ -153,17 +163,19 @@ def reset_password(request, id):
                 logger.info("Password reset successfully")
                 return redirect("password_reset_complete")
             return render(request, template_name="reset_password.html",
-                          context={"form": form})
-        return render(request, template_name="link_expired.html")
+                          context={"form": form,"cartItems":cartItems})
+        return render(request, template_name="link_expired.html", context={"cartItems":cartItems})
     except Exception as ex:
         logger.info("Exception raised in resetting password  -- {0}".format(ex.args))
         return render(request, template_name="reset_password.html",
-                      context={"form": form})
+                      context={"form": form,"cartItems":cartItems})
 
 
 def password_reset_complete(request):
     try:
-        return render(request, template_name="password_reset_complete.html")
+        cookieData = cookieCart(request)
+        cartItems = cookieData['cartItems']
+        return render(request, template_name="password_reset_complete.html",context={"cartItems":cartItems})
     except Exception as ex:
         logger.info("Exception raised in redirecting to password reset complete  -- {0}".format(ex.args))
         return render(request, template_name="reset_password.html"

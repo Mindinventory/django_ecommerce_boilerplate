@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<br>
+<br>
+<br>
+<br>
+<div class="container">
+    <div class="jumbotron text-center mt-5">
+        <h1 class="text-success">Payment Success</h1>
+
+        <button class="clear-cart" id="home" data-url_root="{% url 'home' %}" onclick="myFunction()">Back to home
+        </button>
+
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascript %}
+<script>
+    async function myFunction() {
+        location.href = "/shop/"
+    }
+
+
+
+
+</script>
+{% endblock javascript %}

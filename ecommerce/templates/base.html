@@ -25,7 +25,19 @@
     <link rel="stylesheet" href="{% static 'css/nouislider.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
-
+    <style>
+        span.cart-basket.d-flex.align-items-center.justify-content-center {
+    font-size: .6rem;
+    position: absolute;
+    top: -2px;
+    right: -10px;
+    width: 15px;
+    height: 15px;
+    color: #fff;
+    background-color: #f99300;
+    border-radius: 50%;
+}
+    </style>
     <script>
         var user = '{{request.user}}'
 
@@ -49,7 +61,6 @@
 
         function getCookie(name) {
             var cookieArr = document.cookie.split(";");
-
             for (var i = 0; i < cookieArr.length; i++) {
                 var cookiePair = cookieArr[i].split("=");
 
@@ -86,7 +97,7 @@
             <div class="container">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <a class="navbar-brand logo_h" href="#"><img src="{% static 'img/logo.png' %}"
-                                                                      alt=""></a>
+                                                             alt=""></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
                         data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -130,14 +141,13 @@
 
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="nav-item"><a href="{% url 'cart' %}" class="cart"><span
-                                class="ti-bag d-flex align-items-center justify-content-center">
-             {{ cartItems }}
-          </span>
-                        </a>
-                        </li>
-                        <li class="nav-item">
-
+                        <li class="nav-item" style="position: relative">
+                            <a href="{% url 'cart' %}" class="cart">
+                                <i class="fas fa fa-shopping-cart fa-lg" style="color:#101011;"></i>
+                                <span class="cart-basket d-flex align-items-center justify-content-center" >
+                                {{ cartItems }}
+                            </span>
+                            </a>
                         </li>
                     </ul>
 
@@ -151,25 +161,6 @@
 
 {% block content %} {% endblock content %}
 {% block javascript %}
-<script>
-    document.getElementById("search").onclick = function () {
-        $.ajax({
-            url: $('#search').data('url_root'),
-            data: {
-                'query': $("#query").val(),
-            },
-            headers: {'X-CSRFToken': csrftoken},
-            mode: 'same-origin',
-            success: function (response){
-                data=response;
-                $("#row").html(data);
-
-            }
-
-        })
-    }
-
-</script>
 {% endblock javascript %}
 
 

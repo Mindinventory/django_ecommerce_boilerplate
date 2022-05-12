@@ -14,10 +14,7 @@ for (var i = 0; i < updateBtns.length; i++) {
     })
 }
 
-document.getElementsByClassName('clear-cart').onclick = function (){
-        localStorage.clear()
-        location.reload()
-}
+
 
 
 function addCookieItem(productId, image, price, action) {

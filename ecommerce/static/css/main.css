@@ -4226,7 +4226,7 @@ label {
         top: 22px;
         background: #eeeeee; }
     .cart_inner .table tbody tr td .product_count .reduced {
-      bottom: -6px; }
+      bottom: 2px; }
 .cart_inner .table tbody tr.bottom_button .gray_btn {
   line-height: 38px;
   background: #e8f0f2;

@@ -27,9 +27,11 @@
 <section class="checkout_area section_gap">
     <div class="container px-5">
         <div class="billing_details">
+            <h3 class="p-4">Billing Details</h3>
             <div class="row px-5">
+
                 <div class="col-lg-8 pl-5">
-                    <h3 class="p-4">Billing Details</h3>
+
 
                     <div class="col-lg-50">
                         <div class="order_box">
@@ -57,7 +59,7 @@
 
                 </div>
                 <div class="col-lg-4">
-                    <div class="order_box">
+                    <div class="order_box" style="height: 404px;">
                         <h2>Your Order</h2>
                         <ul class="list">
                             <li><a href="#">Product <span>Total</span></a></li>
@@ -73,8 +75,10 @@
                             <li><a href="#">Discount <span>&#8377; 0</span></a></li>
                             <li><a href="#">Total <span>&#8377; {{ sum|number_format }} </span></a></li>
                         </ul>
+                        {% if product_id > 0 %}
                         <a class="primary-btn removeCartItem" data-toggle="modal" data-target="#myModal"
                            href="{% url 'confirmation' %}">Confirm Order</a>
+                        {% endif %}
 
                         <!-- The Modal -->
                         <div class="modal fade" id="myModal">
@@ -93,24 +97,56 @@
 
                                     <!-- Modal body -->
                                     <div class="modal-body">
-                                        <script src="https://checkout.stripe.com/checkout.js"
-                                                class="stripe-button clear-cart"
-                                                data-key="{{ key }}"
-                                                data-description="A Django Charge"
-                                                data-amount="{{ sum }}"
-                                                data-locale="auto"
-                                                data-url_root="{% url 'clear_cart' %}">
+                                        <div class="col-md-12 form-group">
+                                            <input type="text" name="email" class="form-control" placeholder="E-mail"
+                                                   maxlength="254" required="" id="email">
+                                        </div>
 
-                                            $.ajax({
-                                                url: $('.stripe-button').data('url_root'),
-                                                headers: {'X-CSRFToken': csrftoken},
-                                                mode: 'same-origin',
-                                                success: function (response) {
-                                                    data = response;
+                                        <button type="submit" value="submit" class="primary-btn" id="checkout-button"
+                                                data-id="{{sum}}"
+                                                data-url_root="{% url 'api_checkout_session' pk=product_id %}">Checkout
+                                        </button>
 
 
+                                        <script src="https://js.stripe.com/v3/"></script>
+                                        <script type="text/javascript">
+
+
+                                            // Create an instance of the Stripe object with your publishable API key
+                                            var stripe = Stripe('{{ stripe_publishable_key }}');
+                                            var checkoutButton = document.getElementById('checkout-button');
+
+                                            checkoutButton.addEventListener('click', function () {
+
+                                                var email = document.getElementById('email').value;
+                                                if (email.length == 0) {
+                                                    alert("Please enter your email address.");
+                                                    return;
                                                 }
+
+                                                $.ajax({
+                                                    url: $('#checkout-button').data('url_root'),
+                                                    type: 'POST',
+                                                    data: {
+                                                        'email': email,
+                                                        'sum': $('#checkout-button').data('id')
+                                                    },
+                                                    headers: {'X-CSRFToken': csrftoken},
+                                                    mode: 'same-origin',
+                                                    success: function (session) {
+                                                        console.log('HEWREGH')
+                                                        var d = new Date();
+                                                        d.setTime(d.getTime());
+                                                        var expires = "expires=" + d.toUTCString();
+                                                        document.cookie = 'cart' + "=" + '' + ";" + expires + ";path=/";
+                                                        return stripe.redirectToCheckout({sessionId: session.sessionId});
+
+
+                                                    },
+
+                                                })
                                             })
+
                                         </script>
                                     </div>
 
