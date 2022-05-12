@@ -85,7 +85,7 @@
         <nav class="navbar navbar-expand-lg navbar-light main_box">
             <div class="container">
                 <!-- Brand and toggle get grouped for better mobile display -->
-                <a class="navbar-brand logo_h" href="index.html"><img src="{% static 'img/logo.png' %}"
+                <a class="navbar-brand logo_h" href="#"><img src="{% static 'img/logo.png' %}"
                                                                       alt=""></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
                         data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -130,17 +130,14 @@
 
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="nav-item"><a href="{% url 'cart' %}" class="cart"><span class="ti-bag"><span
-                                class="bg-warning p-1">{{cartItems}}</span>
-							</span></a>
+                        <li class="nav-item"><a href="{% url 'cart' %}" class="cart"><span
+                                class="ti-bag d-flex align-items-center justify-content-center">
+             {{ cartItems }}
+          </span>
+                        </a>
                         </li>
                         <li class="nav-item">
-                            <form class="form-inline my-2 my-lg-0" action="/search/" method="GET">
-                                <input class="form-control mr-sm-2" type="search" placeholder="Search" name="q"
-                                       aria-label="Search">
-                                <button class="search"><span class="lnr lnr-magnifier" id="search"
-                                                             type="submit"></span></button>
-                            </form>
+
                         </li>
                     </ul>
 
@@ -153,7 +150,27 @@
 <!-- End Header Area -->
 
 {% block content %} {% endblock content %}
-{% block javascript %} {% endblock javascript %}
+{% block javascript %}
+<script>
+    document.getElementById("search").onclick = function () {
+        $.ajax({
+            url: $('#search').data('url_root'),
+            data: {
+                'query': $("#query").val(),
+            },
+            headers: {'X-CSRFToken': csrftoken},
+            mode: 'same-origin',
+            success: function (response){
+                data=response;
+                $("#row").html(data);
+
+            }
+
+        })
+    }
+
+</script>
+{% endblock javascript %}
 
 
 <br>
