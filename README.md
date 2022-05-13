@@ -8,7 +8,7 @@ A web application built in Django for purchasing products online.
 Clone the repository:
 
 ````
-$ git clone https://github.com/gocardless/sample-django-app.git
+$ git clone https://github.com/rutvi-mi/django_ecommerce_boilerplate.git
 $ git pull
 $ git checkout -b [name_of_your_new_branch]
 ````

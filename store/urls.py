@@ -14,7 +14,7 @@ urlpatterns = [
          name='product_by_brand'),
     path('category/<int:pk>/category/', login_required(ProductByCategoryView.as_view(), login_url='login'),
          name='product_by_category'),
-    path('cart/', login_required(CartView.as_view()), name='cart'),
+    path('cart/', login_required(CartView.as_view(),login_url='login'), name='cart'),
     path('checkout/', CheckoutView.as_view(), name='checkout'),
     path('api/checkout-session/<int:pk>/', Createcheckoutsession.as_view(), name='api_checkout_session'),
     path('success/', PaymentSuccessView.as_view(), name='success'),
