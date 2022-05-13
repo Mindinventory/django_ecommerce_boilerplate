@@ -37,4 +37,4 @@ def cookiecart(request):
             logger.info(ex.args)
             pass
 
-    return {'items': items, 'gst': gst, 'sub_total': sub_total, 'cartItems': cartitems}
+    return {'items': items, 'gst': gst, 'sub_total': sub_total, 'cartitems': cartitems}

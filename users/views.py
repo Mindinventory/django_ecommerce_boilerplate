@@ -11,7 +11,6 @@ from users.forms import UserRegisterForm, EditProfileForm, LoginForm, ForgotPass
 from users.models import Profile, ShippingAddress, ForgotPassword
 from ecommerce import logger, get_cookie
 
-cartitems, items = get_cookie(request)
 
 
 def register(request):

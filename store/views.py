@@ -11,13 +11,13 @@ from ecommerce.settings import STRIPE_PUBLISHABLE_KEY, STRIPE_SECRET_KEY
 from .models import Product, Category, Brand
 from .tasks import send_confirmation_email_task
 
-cartitems, items = get_cookie(request)
 
 
 class HomeView(TemplateView):
     template_name = 'home.html'
 
     def get_context_data(self, *args, **kwargs):
+        print(cookiecart(request))
         data = {'products': Product.objects.all().order_by('name'), 'cartItems': cartitems}
         return data
 
