@@ -68,7 +68,7 @@ Run the below command to populate the database with products:
 ## **Create an account on stripe for accepting payments**
 
 ````
-  https://dashboard.stripe.com/settings/account?support_details=true
+ https://dashboard.stripe.com/settings/account?support_details=true
 ````
 
 
