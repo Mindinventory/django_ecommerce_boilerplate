@@ -73,10 +73,14 @@ DATABASES = {
         'USER': os.environ.get('DATABASE_USER'),
         'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
         'HOST': 'localhost',
-        'PORT': '5433'
+        'PORT': '5432'
     }
 }
 
+# TODO afjust change order uppoer box design and iother issues and cart count css
+# stripe keys issue mentioniin readme
+# video capture
+# current cookiecart functiomn issue
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators

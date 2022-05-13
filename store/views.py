@@ -87,7 +87,11 @@ class CartView(TemplateView):
     template_name = "cart.html"
 
     def get_context_data(self, **kwargs):
-        data = {'cartItems': cookiecart(self.request)['cartitems'], "items": cookiecart(self.request)['items']}
+        for item in cookiecart(self.request)['items']:
+            total += int(item.get('get_total'))
+            product_id = item.get('product').get('id')
+        data = {'cartItems': cookiecart(self.request)['cartitems'], "items": cookiecart(self.request)['items'],
+                "product_id": product_id}
         return data
 
 
