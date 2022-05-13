@@ -43,7 +43,7 @@ You can find .env.example file for your reference.
 Execute below command to create migrations and register models in the database:
 
 ````
-python manage.py makemigrations
+python manage.py makemigrations <app_name>
 python manage.py migrate
 ````
 
