@@ -10,15 +10,14 @@ from django.views.generic import DetailView, ListView, TemplateView
 from ecommerce.settings import STRIPE_PUBLISHABLE_KEY, STRIPE_SECRET_KEY
 from .models import Product, Category, Brand
 from .tasks import send_confirmation_email_task
-
+from .utils import cookiecart
 
 
 class HomeView(TemplateView):
     template_name = 'home.html'
 
     def get_context_data(self, *args, **kwargs):
-        print(cookiecart(request))
-        data = {'products': Product.objects.all().order_by('name'), 'cartItems': cartitems}
+        data = {'products': Product.objects.all().order_by('name'), 'cartItems': cookiecart(self.request)['cartitems']}
         return data
 
 
@@ -39,7 +38,7 @@ class ProductDetailView(DetailView):
         data = {'product': self.get_queryset().get(pk=self.kwargs["pk"]),
                 "categories": self.get_queryset().filter(category=self.get_object()).exclude(
                     id=self.kwargs["pk"]).order_by('name'),
-                'cartItems': cartitems}
+                'cartItems': cookiecart(self.request)['cartitems']}
         return data
 
 
@@ -50,7 +49,37 @@ class CategoryView(ListView):
     def get_context_data(self, **kwargs):
         data = {'products': Product.objects.all().order_by('name'),
                 'categories': Category.objects.all().order_by('name'),
-                'brands': Brand.objects.all().order_by('name'), 'cartItems': cookieData['cartitems']}
+                'brands': Brand.objects.all().order_by('name'), 'cartItems': cookiecart(self.request)['cartitems']}
+        return data
+
+
+class ProductByCategoryView(DetailView):
+    model = Product
+    template_name = "category.html"
+
+    def get_object(self, queryset=None):
+        products = self.get_queryset().filter(category=self.kwargs["pk"]).order_by('name')
+        return products
+
+    def get_context_data(self, **kwargs):
+        data = {'products': self.get_object(),
+                'categories': Category.objects.all().order_by('name'),
+                'brands': Brand.objects.all().order_by('name'), 'cartItems': cookiecart(self.request)['cartitems']}
+        return data
+
+
+class ProductByBrandView(DetailView):
+    model = Product
+    template_name = "category.html"
+
+    def get_object(self, queryset=None):
+        products = self.get_queryset().filter(brand=self.kwargs["pk"]).order_by('name')
+        return products
+
+    def get_context_data(self, **kwargs):
+        data = {'products': self.get_object(),
+                'categories': Category.objects.all().order_by('name'),
+                'brands': Brand.objects.all().order_by('name'), 'cartItems': cookiecart(self.request)['cartitems']}
         return data
 
 
@@ -58,7 +87,7 @@ class CartView(TemplateView):
     template_name = "cart.html"
 
     def get_context_data(self, **kwargs):
-        data = {'cartItems': cookieData['cartitems'], "items": cookieData['items']}
+        data = {'cartItems': cookiecart(self.request)['cartitems'], "items": cookiecart(self.request)['items']}
         return data
 
 
@@ -69,11 +98,11 @@ class CheckoutView(LoginRequiredMixin, TemplateView):
         total = 0
         product_id = 0
 
-        for item in items:
+        for item in cookiecart(self.request)['items']:
             total += int(item.get('get_total'))
             product_id = item.get('product').get('id')
         data = {"user": self.request.user,
-                "cartItems": cartitems, "items": items,
+                "cartItems": cookiecart(self.request)['cartitems'], "items": cookiecart(self.request)['items'],
                 "stripe_publishable_key": STRIPE_PUBLISHABLE_KEY,
                 "sum": total,
                 "product_id": product_id
@@ -94,12 +123,12 @@ class Createcheckoutsession(View):
         Create a payment checkout session for cart items with stripe
     """
 
-    def post(self, request):
+    def post(self, request, **kwargs):
         get_object_or_404(Product, pk=self.kwargs['pk'])
         stripe.api_key = STRIPE_SECRET_KEY
         lineitems = []
         item_dict = {}
-        for item in items:
+        for item in cookiecart(self.request)['items']:
             item_dict['price_data'] = {
                 "currency": 'inr',
                 "product_data": {
@@ -140,7 +169,7 @@ class PaymentSuccessView(TemplateView):
 
         stripe.api_key = STRIPE_SECRET_KEY
         stripe.checkout.Session.retrieve(session_id)
-        for item in items:
+        for item in cookiecart(self.request)['items']:
             quantity = item.get('quantity')
             product_id = item.get('product').get('id')
             obj = Product.objects.get(id=product_id)
@@ -148,12 +177,12 @@ class PaymentSuccessView(TemplateView):
             obj.qty = avai
             obj.save()
 
-        return render(request, self.template_name, context={"cartItems": cartitems})
+        return render(request, self.template_name, context={"cartItems": cookiecart(self.request)['cartitems']})
 
 
 class PaymentFailedView(TemplateView):
     template_name = "payment_failed.html"
 
     def get_context_data(self, **kwargs):
-        data = {"cartItems": cartitems}
+        data = {"cartItems": cookiecart(self.request)['cartitems']}
         return data

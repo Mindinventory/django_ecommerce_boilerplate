@@ -9,8 +9,8 @@ from store.tasks import send_reset_email_task
 from users.forms import UserRegisterForm, EditProfileForm, LoginForm, ForgotPasswordForm, \
     ResetPasswordForm, ChangePasswordForm
 from users.models import Profile, ShippingAddress, ForgotPassword
-from ecommerce import logger, get_cookie
-
+from ecommerce import logger
+from store.utils import cookiecart
 
 
 def register(request):
@@ -26,11 +26,11 @@ def register(request):
                                        alt_mobile_no=form.cleaned_data.get('alt_mobile_no', None))
             logger.info("User registered successfully")
             return redirect("login")
-        return render(request, "registration.html", {"form": form, "cartItems": cartitems})
+        return render(request, "registration.html", {"form": form, "cartItems": cookiecart(request)['cartitems']})
     except Exception as ex:
         logger.info("Exception raised in registering user -- {0}".format(ex.args))
         return render(request, template_name="registration.html",
-                      context={"form": form, "cartItems": cartitems})
+                      context={"form": form, "cartItems": cookiecart(request)['cartitems']})
 
 
 def login(request):
@@ -50,13 +50,14 @@ def login(request):
             logger.info("User entered invalid login credentials")
             messages.error(request, message="Invalid login credentials")
             return render(request, template_name="login.html",
-                          context={'form': form, "cartItems": cartitems})
+                          context={'form': form, "cartItems": cookiecart(request)['cartitems']})
         if form.errors:
             messages.error(request, message="Invalid login credentials")
-        return render(request, "login.html", {"form": form, "cartItems": cartitems})
+        return render(request, "login.html", {"form": form, "cartItems": cookiecart(request)['cartitems']})
     except Exception as ex:
         logger.info("Exception raised in logging in  user -- {0}".format(ex.args))
-        return render(request, template_name="login.html", context={"form": form, "cartItems": cartitems})
+        return render(request, template_name="login.html",
+                      context={"form": form, "cartItems": cookiecart(request)['cartitems']})
 
 
 @login_required(login_url="login")
@@ -96,11 +97,11 @@ def edit_profile(request):
                 "zipcode": form.cleaned_data.get('zipcode')})
             logger.info("Profile of user with name {0} edited successfully".format(request.user.username))
             return redirect('home')
-        return render(request, 'edit_profile.html', {"form": form, "cartItems": cartitems})
+        return render(request, 'edit_profile.html', {"form": form, "cartItems": cookiecart(request)['cartitems']})
     except Exception as ex:
         logger.info("Exception raised in editing profile-- {0}".format(ex.args))
         return render(request, template_name="edit_profile.html",
-                      context={"form": form, "cartItems": cartitems})
+                      context={"form": form, "cartItems": cookiecart(request)['cartitems']})
 
 
 @login_required(login_url="login")
@@ -111,16 +112,18 @@ def change_password(request):
     try:
         form = ChangePasswordForm(request.user, request.POST or None)
         if form.is_valid():
-            user = form.save()
-            # Logs out the current user from the session
-            update_session_auth_hash(request, user)
+            request.user.set_password(form.cleaned_data['new_password1'])
+            request.user.save()
+            # Updates password in current session and logs out current user from all other sessions
+            update_session_auth_hash(request, request.user)
             logger.info("Password of user with name {0} changed successfully".format(request.user.username))
             return redirect('login')
-        return render(request, "change_password.html", {"form": form, "cartItems": cartitems})
+        return render(request, "change_password.html",
+                      {"form": form, "cartItems": cookiecart(request)['cartitems']})
     except Exception as ex:
         logger.info("Exception raised in changing password - {0}".format(ex.args))
         return render(request, template_name="change_password.html",
-                      context={"form": form, "cartItems": cartitems})
+                      context={"form": form, "cartItems": cookiecart(request)['cartitems']})
 
 
 def forgot_password(request):
@@ -140,11 +143,11 @@ def forgot_password(request):
                              )
             return redirect('login')
         return render(request, template_name="forgot_password.html",
-                      context={"form": form, "cartItems": cartitems})
+                      context={"form": form, "cartItems": cookiecart(request)['cartitems']})
     except Exception as ex:
         logger.info("Exception raised in sending reset password link  -- {0}".format(ex.args))
         return render(request, template_name="forgot_password.html",
-                      context={"form": form, "cartItems": cartitems})
+                      context={"form": form, "cartItems": cookiecart(request)['cartitems']})
 
 
 def reset_password(request, id):
@@ -157,21 +160,23 @@ def reset_password(request, id):
                 logger.info("Password reset successfully")
                 return redirect("password_reset_complete")
             return render(request, template_name="reset_password.html",
-                          context={"form": form, "cartItems": cartitems})
-        return render(request, template_name="link_expired.html", context={"cartItems": cartitems})
+                          context={"form": form, "cartItems": cookiecart(request)['cartitems']})
+        return render(request, template_name="link_expired.html",
+                      context={"cartItems": cookiecart(request)['cartitems']})
     except Exception as ex:
         logger.info("Exception raised in resetting password  -- {0}".format(ex.args))
         return render(request, template_name="reset_password.html",
-                      context={"form": form, "cartItems": cartitems})
+                      context={"form": form, "cartItems": cookiecart(request)['cartitems']})
 
 
 def password_reset_complete(request):
     try:
         return render(request, template_name="password_reset_complete.html",
-                      context={"cartItems": cartitems})
+                      context={"cartItems": cookiecart(request)['cartitems']})
     except Exception as ex:
         logger.info("Exception raised in redirecting to password reset complete  -- {0}".format(ex.args))
-        return render(request, template_name="reset_password.html", context={"cartItems": cartitems}
+        return render(request, template_name="reset_password.html",
+                      context={"cartItems": cookiecart(request)['cartitems']}
                       )
 
 

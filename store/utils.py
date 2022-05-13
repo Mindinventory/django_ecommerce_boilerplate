@@ -9,7 +9,6 @@ def cookiecart(request):
     try:
         cart = json.loads(request.COOKIES['cart'])
     except Exception as ex:
-        logger.info(ex.args)
         cart = {}
 
     items = []

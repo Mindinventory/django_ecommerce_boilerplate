@@ -27,16 +27,16 @@
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
     <style>
         span.cart-basket.d-flex.align-items-center.justify-content-center {
-    font-size: .6rem;
-    position: absolute;
-    top: -2px;
-    right: -10px;
-    width: 15px;
-    height: 15px;
-    color: #fff;
-    background-color: #f99300;
-    border-radius: 50%;
-}
+            font-size: .6rem;
+            position: absolute;
+            top: -2px;
+            right: -10px;
+            width: 15px;
+            height: 15px;
+            color: #fff;
+            background-color: #f99300;
+            border-radius: 50%;
+        }
     </style>
     <script>
         const user = '{{request.user}}';
@@ -64,7 +64,7 @@
             for (let i = 0; i < cookieArr.length; i++) {
                 const cookiePair = cookieArr[i].split("=");
 
-                if (name === cookiePair[0].trim()) {
+                if (name == cookiePair[0].trim()) {
                     return decodeURIComponent(cookiePair[1]);
                 }
             }
@@ -73,7 +73,7 @@
         }
 
         let cart = JSON.parse(getCookie('cart'));
-        if (cart === undefined) {
+        if (cart == undefined) {
             cart = {}
             document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
         }
@@ -144,7 +144,7 @@
                         <li class="nav-item" style="position: relative">
                             <a href="{% url 'cart' %}" class="cart">
                                 <i class="fas fa fa-shopping-cart fa-lg" style="color:#101011;"></i>
-                                <span class="cart-basket d-flex align-items-center justify-content-center" >
+                                <span class="cart-basket d-flex align-items-center justify-content-center">
                                 {{ cartItems }}
                             </span>
                             </a>
