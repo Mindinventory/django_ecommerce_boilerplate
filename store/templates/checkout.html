@@ -113,13 +113,13 @@
 
 
                                             // Create an instance of the Stripe object with your publishable API key
-                                            var stripe = Stripe('{{ stripe_publishable_key }}');
-                                            var checkoutButton = document.getElementById('checkout-button');
+                                            const stripe = Stripe('{{ stripe_publishable_key }}');
+                                            const checkoutButton = document.getElementById('checkout-button');
 
                                             checkoutButton.addEventListener('click', function () {
 
-                                                var email = document.getElementById('email').value;
-                                                if (email.length == 0) {
+                                                const email = document.getElementById('email').value;
+                                                if (email.length === 0) {
                                                     alert("Please enter your email address.");
                                                     return;
                                                 }
@@ -134,9 +134,9 @@
                                                     headers: {'X-CSRFToken': csrftoken},
                                                     mode: 'same-origin',
                                                     success: function (session) {
-                                                        var d = new Date();
+                                                        const d = new Date();
                                                         d.setTime(d.getTime());
-                                                        var expires = "expires=" + d.toUTCString();
+                                                        const expires = "expires=" + d.toUTCString();
                                                         document.cookie = 'cart' + "=" + '' + ";" + expires + ";path=/";
                                                         return stripe.redirectToCheckout({sessionId: session.sessionId});
 

@@ -3,9 +3,10 @@
 from .celery import app as celery_app
 import logging
 
-
 __all__ = ('celery_app',)
 logger = logging.getLogger("ecommerce")
 
 
-
+def get_cookie(request):
+    cookiedata = cookiecart(request)
+    return cookiedata['cartitems'], cookiedata['items']

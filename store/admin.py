@@ -12,10 +12,9 @@ class AdminBrand(admin.ModelAdmin):
 
 
 class AdminProduct(admin.ModelAdmin):
-    list_display = ['name','price','brand','category']
+    list_display = ['name', 'price', 'brand', 'category']
 
 
 admin.site.register(Category, AdminCategory)
 admin.site.register(Brand, AdminBrand)
 admin.site.register(Product, AdminProduct)
-

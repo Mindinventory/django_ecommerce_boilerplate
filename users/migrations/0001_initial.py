@@ -6,7 +6,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -21,7 +20,9 @@ class Migration(migrations.Migration):
                 ('address_one', models.CharField(blank=True, max_length=250, null=True)),
                 ('address_two', models.CharField(blank=True, max_length=250, null=True)),
                 ('zipcode', models.CharField(blank=True, max_length=25, null=True)),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='user_shipping_address', to=settings.AUTH_USER_MODEL)),
+                ('user',
+                 models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='user_shipping_address',
+                                      to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'verbose_name': 'shipping_address',
@@ -34,7 +35,8 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('mobile_no', models.CharField(blank=True, max_length=15, null=True)),
                 ('alt_mobile_no', models.CharField(blank=True, max_length=15, null=True)),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='user_profile', to=settings.AUTH_USER_MODEL)),
+                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='user_profile',
+                                              to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'verbose_name': 'profile',

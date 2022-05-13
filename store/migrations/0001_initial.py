@@ -6,7 +6,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -43,7 +42,8 @@ class Migration(migrations.Migration):
                 ('date_ordered', models.DateTimeField(auto_now_add=True)),
                 ('complete', models.BooleanField(default=False)),
                 ('transaction_id', models.CharField(default=None, max_length=200, null=True)),
-                ('customer', models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='order_of_customer', to=settings.AUTH_USER_MODEL)),
+                ('customer', models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                               related_name='order_of_customer', to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'verbose_name': 'order',
@@ -59,8 +59,11 @@ class Migration(migrations.Migration):
                 ('qty', models.IntegerField()),
                 ('description', models.CharField(blank=True, max_length=200, null=True)),
                 ('image', models.FileField(upload_to='uploads/products/')),
-                ('brand', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='product_brand', to='store.brand')),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='product_category', to='store.category')),
+                ('brand', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='product_brand',
+                                            to='store.brand')),
+                ('category',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='product_category',
+                                   to='store.category')),
             ],
             options={
                 'verbose_name': 'product',
@@ -73,8 +76,10 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('quantity', models.IntegerField(default=None, null=True)),
                 ('date_added', models.DateTimeField(auto_now_add=True)),
-                ('order', models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='order_item', to='store.order')),
-                ('product', models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='product_item', to='store.product')),
+                ('order', models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                            related_name='order_item', to='store.order')),
+                ('product', models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                              related_name='product_item', to='store.product')),
             ],
             options={
                 'verbose_name': 'order_item',

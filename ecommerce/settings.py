@@ -76,7 +76,6 @@ DATABASES = {
         'PORT': '5433'
     }
 }
-# TODO change port to 5432 before pushing
 
 
 # Password validation
@@ -119,14 +118,16 @@ STATICFILES_DIRS = [
     BASE_DIR / "ecommerce/static"
 ]
 
-
+# Media files storage settings
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
+# Celery setti
 CELERY_BROKER_URL = ''
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 
+# Email backend configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
@@ -134,6 +135,7 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 
+# Stripe API configuration
 STRIPE_PUBLISHABLE_KEY = os.environ.get('STRIPE_PUBLISHABLE_KEY')
 STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
 
@@ -154,8 +156,5 @@ LOGGING = {
     },
 }
 
-# primary key configuration for Django version 3+
+# Primary key configuration for Django version 3+
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
-
-
-

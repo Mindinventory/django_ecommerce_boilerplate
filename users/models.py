@@ -8,7 +8,6 @@ class ShippingAddress(models.Model):
     address_two = models.CharField(max_length=250, null=True, blank=True)
     zipcode = models.CharField(max_length=25, null=True, blank=True)
 
-
     def __str__(self):
         return self.user.username
 

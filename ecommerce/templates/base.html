@@ -39,7 +39,7 @@
 }
     </style>
     <script>
-        var user = '{{request.user}}'
+        const user = '{{request.user}}';
 
         function getToken(name) {
             let cookieValue = null;
@@ -60,11 +60,11 @@
         const csrftoken = getToken('csrftoken');
 
         function getCookie(name) {
-            var cookieArr = document.cookie.split(";");
-            for (var i = 0; i < cookieArr.length; i++) {
-                var cookiePair = cookieArr[i].split("=");
+            const cookieArr = document.cookie.split(";");
+            for (let i = 0; i < cookieArr.length; i++) {
+                const cookiePair = cookieArr[i].split("=");
 
-                if (name == cookiePair[0].trim()) {
+                if (name === cookiePair[0].trim()) {
                     return decodeURIComponent(cookiePair[1]);
                 }
             }
@@ -72,8 +72,8 @@
             return null;
         }
 
-        var cart = JSON.parse(getCookie('cart'))
-        if (cart == undefined) {
+        let cart = JSON.parse(getCookie('cart'));
+        if (cart === undefined) {
             cart = {}
             document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
         }

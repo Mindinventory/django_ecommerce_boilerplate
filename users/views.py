@@ -4,13 +4,14 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
-from ecommerce.email.email import send_mail_from_system
 from ecommerce.settings import EMAIL_HOST_USER
-from store.utils import cookieCart
+from store.tasks import send_reset_email_task
 from users.forms import UserRegisterForm, EditProfileForm, LoginForm, ForgotPasswordForm, \
     ResetPasswordForm, ChangePasswordForm
 from users.models import Profile, ShippingAddress, ForgotPassword
-from ecommerce import logger
+from ecommerce import logger, get_cookie
+
+cartitems, items = get_cookie(request)
 
 
 def register(request):
@@ -18,8 +19,6 @@ def register(request):
         Registers new user in the system and redirects them to the login page.
     """
     try:
-        cookieData = cookieCart(request)
-        cartItems = cookieData['cartItems']
         form = UserRegisterForm(request.POST or None)
         if form.is_valid():
             obj = form.save()
@@ -28,10 +27,11 @@ def register(request):
                                        alt_mobile_no=form.cleaned_data.get('alt_mobile_no', None))
             logger.info("User registered successfully")
             return redirect("login")
-        return render(request, "registration.html", {"form": form,"cartItems":cartItems})
+        return render(request, "registration.html", {"form": form, "cartItems": cartitems})
     except Exception as ex:
         logger.info("Exception raised in registering user -- {0}".format(ex.args))
-        return render(request, template_name="registration.html", context={"form": form,"cartItems":cartItems})
+        return render(request, template_name="registration.html",
+                      context={"form": form, "cartItems": cartitems})
 
 
 def login(request):
@@ -42,8 +42,6 @@ def login(request):
         if request.user.is_authenticated:
             return redirect("home")
         form = LoginForm(request=request, data=request.POST or None)
-        cookieData = cookieCart(request)
-        cartItems = cookieData['cartItems']
         if form.is_valid():
             user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
             if user is not None:
@@ -52,13 +50,14 @@ def login(request):
                 return redirect("home")
             logger.info("User entered invalid login credentials")
             messages.error(request, message="Invalid login credentials")
-            return render(request, template_name="login.html", context={'form': form, "cartItems": cartItems})
+            return render(request, template_name="login.html",
+                          context={'form': form, "cartItems": cartitems})
         if form.errors:
             messages.error(request, message="Invalid login credentials")
-        return render(request, "login.html", {"form": form, "cartItems": cartItems})
+        return render(request, "login.html", {"form": form, "cartItems": cartitems})
     except Exception as ex:
         logger.info("Exception raised in logging in  user -- {0}".format(ex.args))
-        return render(request, template_name="login.html", context={"form": form, "cartItems": cartItems})
+        return render(request, template_name="login.html", context={"form": form, "cartItems": cartitems})
 
 
 @login_required(login_url="login")
@@ -67,8 +66,6 @@ def edit_profile(request):
         Allows user to view and edit profile.
     """
     try:
-        cookieData = cookieCart(request)
-        cartItems = cookieData['cartItems']
         form = EditProfileForm(request.POST or None,
                                initial={
                                    "first_name": request.user.first_name,
@@ -79,18 +76,18 @@ def edit_profile(request):
                                        request.user, "user_shipping_address") else None,
                                    "address_two": request.user.user_shipping_address.address_two if hasattr(
                                        request.user, "user_shipping_address") else None,
-                                   "zipcode": request.user.user_shipping_address.zipcode if hasattr(request.user,
-                                                                                                    "user_shipping_address") else None,
-                                   "mobile_no": request.user.user_profile.mobile_no if hasattr(request.user,
-                                                                                               "user_profile") else None,
-                                   "alt_mobile_no": request.user.user_profile.alt_mobile_no if hasattr(request.user,
-                                                                                                       "user_profile") else None,
+                                   "zipcode": request.user.user_shipping_address.zipcode
+                                   if hasattr(request.user, "user_shipping_address") else None,
+                                   "mobile_no": request.user.user_profile.mobile_no
+                                   if hasattr(request.user, "user_profile") else None,
+                                   "alt_mobile_no": request.user.user_profile.alt_mobile_no
+                                   if hasattr(request.user, "user_profile") else None,
                                }
                                )
         if form.is_valid():
-            request.user.first_name, request.user.last_name, request.user.username, request.user.email = form.cleaned_data.get(
-                'first_name'), form.cleaned_data.get('last_name'), form.cleaned_data.get(
-                'username'), form.cleaned_data.get('email')
+            request.user.first_name, request.user.last_name, request.user.username, request.user.email \
+                = form.cleaned_data.get('first_name'), form.cleaned_data.get('last_name'), \
+                  form.cleaned_data.get('username'), form.cleaned_data.get('email')
             request.user.save()
             Profile.objects.update_or_create(user=request.user,
                                              defaults={"mobile_no": form.cleaned_data.get('mobile_no'),
@@ -100,10 +97,11 @@ def edit_profile(request):
                 "zipcode": form.cleaned_data.get('zipcode')})
             logger.info("Profile of user with name {0} edited successfully".format(request.user.username))
             return redirect('home')
-        return render(request, 'edit_profile.html', {"form": form,"cartItems":cartItems})
+        return render(request, 'edit_profile.html', {"form": form, "cartItems": cartitems})
     except Exception as ex:
         logger.info("Exception raised in editing profile-- {0}".format(ex.args))
-        return render(request, template_name="edit_profile.html", context={"form": form,"cartItems":cartItems})
+        return render(request, template_name="edit_profile.html",
+                      context={"form": form, "cartItems": cartitems})
 
 
 @login_required(login_url="login")
@@ -112,8 +110,6 @@ def change_password(request):
         Allows user to change password and allow login with new password.
     """
     try:
-        cookieData = cookieCart(request)
-        cartItems = cookieData['cartItems']
         form = ChangePasswordForm(request.user, request.POST or None)
         if form.is_valid():
             user = form.save()
@@ -121,10 +117,11 @@ def change_password(request):
             update_session_auth_hash(request, user)
             logger.info("Password of user with name {0} changed successfully".format(request.user.username))
             return redirect('login')
-        return render(request, "change_password.html", {"form": form,"cartItems":cartItems})
+        return render(request, "change_password.html", {"form": form, "cartItems": cartitems})
     except Exception as ex:
         logger.info("Exception raised in changing password - {0}".format(ex.args))
-        return render(request, template_name="change_password.html", context={"form": form,"cartItems":cartItems})
+        return render(request, template_name="change_password.html",
+                      context={"form": form, "cartItems": cartitems})
 
 
 def forgot_password(request):
@@ -132,30 +129,28 @@ def forgot_password(request):
         Sends an email with one-use only reset password link to user.
     """
     try:
-        cookieData = cookieCart(request)
-        cartItems = cookieData['cartItems']
         form = ForgotPasswordForm(request.POST or None)
         if form.is_valid():
             user = get_object_or_404(User, email=form.cleaned_data["email"])
             ForgotPassword.objects.create(user=user)
-            send_mail_from_system(subject="Reset your password", context={"user": user}, from_email=EMAIL_HOST_USER,
+            send_reset_email_task(subject="Reset your password", context={"user": user}, from_email=EMAIL_HOST_USER,
                                   to=[user.email], html_email_template_name="email_template.html")
             logger.info("Reset password link sent to user successfully")
             messages.success(request,
                              message="An email with reset password link is sent to you. Please check your inbox.",
                              )
             return redirect('login')
-        return render(request, template_name="forgot_password.html", context={"form": form,"cartItems":cartItems})
-    except ArithmeticError as ex:
+        return render(request, template_name="forgot_password.html",
+                      context={"form": form, "cartItems": cartitems})
+    except Exception as ex:
         logger.info("Exception raised in sending reset password link  -- {0}".format(ex.args))
-        return render(request, template_name="forgot_password.html", context={"form": form,"cartItems":cartItems})
+        return render(request, template_name="forgot_password.html",
+                      context={"form": form, "cartItems": cartitems})
 
 
 def reset_password(request, id):
     user = get_object_or_404(User, pk=id)
     try:
-        cookieData = cookieCart(request)
-        cartItems = cookieData['cartItems']
         if ForgotPassword.objects.filter(user=user).exists():
             form = ResetPasswordForm(user, request.POST or None)
             if form.is_valid():
@@ -163,22 +158,21 @@ def reset_password(request, id):
                 logger.info("Password reset successfully")
                 return redirect("password_reset_complete")
             return render(request, template_name="reset_password.html",
-                          context={"form": form,"cartItems":cartItems})
-        return render(request, template_name="link_expired.html", context={"cartItems":cartItems})
+                          context={"form": form, "cartItems": cartitems})
+        return render(request, template_name="link_expired.html", context={"cartItems": cartitems})
     except Exception as ex:
         logger.info("Exception raised in resetting password  -- {0}".format(ex.args))
         return render(request, template_name="reset_password.html",
-                      context={"form": form,"cartItems":cartItems})
+                      context={"form": form, "cartItems": cartitems})
 
 
 def password_reset_complete(request):
     try:
-        cookieData = cookieCart(request)
-        cartItems = cookieData['cartItems']
-        return render(request, template_name="password_reset_complete.html",context={"cartItems":cartItems})
+        return render(request, template_name="password_reset_complete.html",
+                      context={"cartItems": cartitems})
     except Exception as ex:
         logger.info("Exception raised in redirecting to password reset complete  -- {0}".format(ex.args))
-        return render(request, template_name="reset_password.html"
+        return render(request, template_name="reset_password.html", context={"cartItems": cartitems}
                       )
 
 

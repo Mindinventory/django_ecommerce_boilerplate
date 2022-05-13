@@ -29,7 +29,7 @@ Install the dependencies:
 $ pip install -r requirements.txt
 ````
 
-## **Setup a database**
+## **Set up a database**
 
 Configure Database settings in settings.py folder as suggested in below documentation:
 
@@ -57,14 +57,19 @@ python manage.py runserver
 
 Navigate to http://127.0.0.1:8000/ 
 
-## Setup the Products module 
+## **Set up the Products module** 
 
 Run the below command to populate the database with products:
 
 ````
  python manage.py loaddata products.json
- ````
+````
 
+## **Create an account on stripe for accepting payments**
+
+````
+  https://dashboard.stripe.com/settings/account?support_details=true
+````
 
 
 
