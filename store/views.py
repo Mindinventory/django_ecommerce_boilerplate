@@ -97,7 +97,7 @@ class CartView(TemplateView):
         return data
 
 
-class CheckoutView(LoginRequiredMixin, TemplateView):
+class CheckoutView(TemplateView):
     template_name = "checkout.html"
 
     def get_context_data(self, **kwargs):
