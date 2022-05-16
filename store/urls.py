@@ -15,9 +15,9 @@ urlpatterns = [
     path('category/<int:pk>/category/', ProductByCategoryView.as_view(),
          name='product_by_category'),
     path('cart/', CartView.as_view(), name='cart'),
-    path('checkout/',CheckoutView.as_view(), name='checkout'),
+    path('checkout/', login_required(CheckoutView.as_view(), login_url='login'), name='checkout'),
     path('api/checkout-session/<int:pk>/', Createcheckoutsession.as_view(), name='api_checkout_session'),
     path('success/', PaymentSuccessView.as_view(), name='success'),
     path('failed/', PaymentFailedView.as_view(), name='failed'),
-    path('confirmation/',  login_required(ConfirmationView.as_view(), login_url="login"), name='confirmation'),
+    path('confirmation/', ConfirmationView.as_view(), name='confirmation'),
 ]

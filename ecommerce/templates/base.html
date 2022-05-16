@@ -27,7 +27,7 @@
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
     <style>
         span.cart-basket.d-flex.align-items-center.justify-content-center {
-            font-size: .6rem;
+            font-size: .5rem;
             position: absolute;
             top: -2px;
             right: -10px;
@@ -96,8 +96,9 @@
         <nav class="navbar navbar-expand-lg navbar-light main_box">
             <div class="container">
                 <!-- Brand and toggle get grouped for better mobile display -->
-                <a class="navbar-brand logo_h" href="#"><img src="{% static 'img/logo.png' %}"
-                                                             alt=""></a>
+                <a class="navbar-brand logo_h" href="https://www.mindinventory.com/" target="_blank"><img
+                        src="{% static 'img/logo.png' %}"
+                        alt=""></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
                         data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -116,28 +117,29 @@
                                 <li class="nav-item"><a class="nav-link" href="{% url 'categories' %}">Shop By
                                     Category</a></li>
                                 <li class="nav-item"><a class="nav-link" href="{% url 'cart' %}">Shopping Cart</a></li>
-                                <li class="nav-item"><a class="nav-link" href="{% url 'checkout' %}">Product
-                                    Checkout</a>
-                                </li>
-                            </ul>
-                        </li>
 
-                        <li class="nav-item submenu dropdown active">
-                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
-                               aria-haspopup="true" aria-expanded="false"><img class="img-fluid"
-                                                                               src="{% static 'img/profileicon.png' %}"
-                                                                               alt=""
-                                                                               style="width: 30px;"></a>
-                            <ul class="dropdown-menu">
-                                <li class="nav-item"><a class="nav-link" href="{% url 'edit_profile' %}">View
-                                    Profile</a>
-                                </li>
-                                <li class="nav-item"><a class="nav-link" href="{% url 'change_password' %}">Change
-                                    Password</a>
-                                </li>
-                                <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
                             </ul>
                         </li>
+                        {% if request.user.is_authenticated %}
+
+                            <li class="nav-item submenu dropdown active">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
+                                   aria-haspopup="true" aria-expanded="false"><img class="img-fluid"
+                                                                                   src="{% static 'img/profileicon.png' %}"
+                                                                                   alt=""
+                                                                                   style="width: 30px;"></a>
+                                <ul class="dropdown-menu">
+                                    <li class="nav-item"><a class="nav-link" href="{% url 'edit_profile' %}">View
+                                        Profile</a>
+                                    </li>
+                                    <li class="nav-item"><a class="nav-link" href="{% url 'change_password' %}">Change
+                                        Password</a>
+                                    </li>
+                                    <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+                                </ul>
+                            </li>
+                        {% endif %}
+
 
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
@@ -145,7 +147,7 @@
                             <a href="{% url 'cart' %}" class="cart">
                                 <i class="fas fa fa-shopping-cart fa-lg" style="color:#101011;"></i>
                                 <span class="cart-basket d-flex align-items-center justify-content-center">
-                                {{ cartItems }}
+                                {{ cartitems }}
                             </span>
                             </a>
                         </li>

@@ -37,28 +37,36 @@
                             <div class="order_box">
 
                                 <ul class="list list_2">
-                                    <li><a href="#">Name <span
-                                            style="text-transform: none !important;">{{ user.first_name }} {{ user.last_name }}</span></a>
+                                    <li>
+                                        {% if user.first_name and user.last_name %}
+                                        <a href="#">Name <span
+                                                style="text-transform: none !important;">
+                                            {{ user.get_full_name }} </span></a>
+                                        {% endif %}
+
                                     </li>
                                     <li><a href="#">UserName<span
-                                            style="text-transform: none !important;"> {{ user.username }}</span></a>
+                                            style="text-transform: none !important;"> {% if user.username %}
+                                        {{ user.username }} {% else %} --- {% endif %} </span></a>
                                     </li>
-                                    <li><a href="#">Email <span
-                                            style="text-transform: none !important;"> {{ user.email }}</span></a></li>
-                                    <li><a href="#">Mobileno <span
-                                            style="text-transform: none !important;"> {{ user.user_profile.alt_mobile_no }} </span></a>
+
+                                    <li><a href="#">Mobile no <span
+                                            style="text-transform: none !important;"> {% if user.user_profile.mobile_no %}
+                                        {{ user.user_profile.mobile_no }} {% else %} --- {% endif %}  </span></a>
                                     </li>
-                                    <li><a href="#">Alt Mobileno <span
-                                            style="text-transform: none !important;"> {{ user.user_profile.alt_mobile_no }} </span></a>
-                                    </li>
+
                                     <li><a href="#">Address1 <span
-                                            style="text-transform: none !important;"> {{ user.user_shipping_address.address_one }} </span></a>
+                                            style="text-transform: none !important;"> {% if user.user_shipping_address.address_one %}
+                                        {{ user.user_shipping_address.address_one }} {% else %} --- {% endif %}  </span></a>
                                     </li>
                                     <li><a href="#">Address2 <span
-                                            style="text-transform: none !important;"> {{ user.user_shipping_address.address_two }} </span></a>
+                                            style="text-transform: none !important;"> {% if user.user_shipping_address.address_two %}
+                                        {{ user.user_shipping_address.address_two }} {% else %}
+                                        --- {% endif %}</span></a>
                                     </li>
                                     <li><a href="#">Zipcode <span
-                                            style="text-transform: none !important;"> {{ user.user_shipping_address.zipcode }} </span></a>
+                                            style="text-transform: none !important;">{% if user.user_shipping_address.zipcode %}
+                                        {{ user.user_shipping_address.zipcode }} {% else %} --- {% endif %}</span></a>
                                     </li>
                                 </ul>
                             </div>

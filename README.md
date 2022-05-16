@@ -2,7 +2,7 @@
 
 A web application built in Django for purchasing products online.
 
-## **Project Setup**
+## **Project setup**
 
 Clone the repository:
 
@@ -43,7 +43,7 @@ python manage.py makemigrations store
 python manage.py migrate
 ````
 
-## **Set up the Products module**
+## **Set up the products module**
 
 Run the below command to populate the database with products:
 

@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth import password_validation
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, \
     SetPasswordForm, AuthenticationForm
-from django.contrib.auth.models import User
+from users.models import User
 from django.core.exceptions import ValidationError
 
 
@@ -10,36 +10,21 @@ class UserRegisterForm(UserCreationForm):
     """
         A form that creates a user, with no privileges.
     """
-    first_name = forms.CharField(max_length=30,
-                                 widget=forms.TextInput(attrs={"class": 'form-control', 'placeholder': 'First name'}))
-    last_name = forms.CharField(max_length=30,
-                                widget=forms.TextInput(attrs={"class": 'form-control', 'placeholder': 'Last name'}))
-    email = forms.EmailField(max_length=254,
-                             widget=forms.TextInput(attrs={"class": 'form-control', 'placeholder': 'E-mail'}))
-    username = forms.CharField(max_length=150,
-                               widget=forms.TextInput(attrs={"class": 'form-control', 'placeholder': 'Username'}))
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={"class": 'form-control', 'placeholder': 'Username'}))
     password1 = forms.CharField(strip=False,
                                 widget=forms.PasswordInput(
-                                    attrs={'autocomplete': 'new-password', "class": 'form-control',
-                                           'placeholder': 'Password'}),
-                                help_text=password_validation.password_validators_help_text_html())
-
-    password2 = forms.CharField(
-        widget=forms.PasswordInput(
-            attrs={'autocomplete': 'new-password', "class": 'form-control', 'placeholder': 'Confirm password'}),
-        strip=False,
-        help_text="Enter the same password as before, for verification.",
-    )
-    mobile_no = forms.CharField(min_length=12, max_length=15, required=False,
-                                widget=forms.TextInput(attrs={"class": 'form-control', 'placeholder': 'Mobile no.'}))
-    alt_mobile_no = forms.CharField(min_length=12, max_length=15, required=False,
-                                    widget=forms.TextInput(
-                                        attrs={"class": 'form-control', 'placeholder': 'Alternate mobile no.'}))
+                                    attrs={'autocomplete': 'current-password', "class": 'form-control',
+                                           'placeholder': 'Password'}))
+    password2 = forms.CharField(required=False)
+    mobile_no = forms.CharField(min_length=12, max_length=15, required=False, widget=forms.TextInput(
+        attrs={"class": 'form-control', 'placeholder': 'Mobile no'}))
+    alt_mobile_no = forms.CharField(min_length=12, max_length=15, required=False, widget=forms.TextInput(
+        attrs={"class": 'form-control', 'placeholder': 'Mobile no'}))
 
     class Meta:
         model = User
-        fields = ["first_name", "last_name", "email", "username", "password1", "password2", "mobile_no",
-                  "alt_mobile_no"]
+        fields = ["username", "password1", "password2","mobile_no"]
 
 
 class LoginForm(AuthenticationForm):
@@ -61,9 +46,6 @@ class EditProfileForm(forms.Form):
     last_name = forms.CharField(max_length=30,
                                 widget=forms.TextInput(attrs={"class": 'form-control', 'placeholder': 'Last name',
                                                               }))
-    email = forms.EmailField(max_length=254,
-                             widget=forms.TextInput(
-                                 attrs={"class": 'form-control', 'placeholder': 'E-mail'}))
     username = forms.CharField(max_length=150,
                                widget=forms.TextInput(
                                    attrs={"class": 'form-control', 'placeholder': 'Username'}))

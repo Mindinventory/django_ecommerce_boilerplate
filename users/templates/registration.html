@@ -39,45 +39,19 @@
                     <h3>Sign up</h3>
                     <form class="row register_form" method="post" id="contactForm" novalidate="novalidate">
                         {% csrf_token %}
-                        <div class="col-md-12 form-group">
-                            {{ form.first_name }}
-                            <div class='error text-danger'>{{form.first_name.errors}}</div>
 
-                        </div>
-                        <div class="col-md-12 form-group">
-                            {{ form.last_name }}
-                            <div class='error text-danger'>{{form.last_name.errors}}</div>
-
-                        </div>
                         <div class="col-md-12 form-group">
                             {{ form.username }}
                             <div class='error text-danger'>{{form.username.errors}}</div>
 
                         </div>
-                        <div class="col-md-12 form-group">
-                            {{ form.mobile_no }}
-                            <div class='error text-danger'>{{form.mobile_no.errors}}</div>
 
-                        </div>
-                        <div class="col-md-12 form-group">
-                            {{ form.alt_mobile_no }}
-                            <div class='error text-danger'>{{form.alt_mobile_no.errors}}</div>
-
-                        </div>
-                        <div class="col-md-12 form-group">
-                            {{ form.email }}
-                            <div class='error text-danger'>{{form.email.errors}}</div>
-
-                        </div>
                         <div class="col-md-12 form-group">
                             {{ form.password1 }}
                             <div class='error text-danger'>{{form.password1.errors}}</div>
 
                         </div>
-                        <div class="col-md-12 form-group">
-                            {{ form.password2 }}
-                            <div class='error text-danger'>{{form.password2.errors}}</div>
-                        </div>
+
                         <div class="col-md-12 form-group">
                             <button type="submit" value="submit" class="primary-btn">Sign up</button>
                         </div>

@@ -13,11 +13,17 @@ from .tasks import send_confirmation_email_task
 from .utils import cookiecart
 
 
-class HomeView(TemplateView):
+class HomeView(ListView):
     template_name = 'home.html'
+    model = Product
+
+    def get_queryset(self, *args, **kwargs):
+        qs = super(HomeView, self).get_queryset(*args, **kwargs)
+        qs = qs.order_by("name")
+        return qs
 
     def get_context_data(self, *args, **kwargs):
-        data = {'products': Product.objects.all().order_by('name'), 'cartItems': cookiecart(self.request)['cartitems']}
+        data = {'products': self.get_queryset(), 'cartitems': cookiecart(self.request)['cartitems']}
         return data
 
 
@@ -38,7 +44,7 @@ class ProductDetailView(DetailView):
         data = {'product': self.get_queryset().get(pk=self.kwargs["pk"]),
                 "categories": self.get_queryset().filter(category=self.get_object()).exclude(
                     id=self.kwargs["pk"]).order_by('name'),
-                'cartItems': cookiecart(self.request)['cartitems']}
+                'cartitems': cookiecart(self.request)['cartitems']}
         return data
 
 
@@ -49,7 +55,7 @@ class CategoryView(ListView):
     def get_context_data(self, **kwargs):
         data = {'products': Product.objects.all().order_by('name'),
                 'categories': Category.objects.all().order_by('name'),
-                'brands': Brand.objects.all().order_by('name'), 'cartItems': cookiecart(self.request)['cartitems']}
+                'brands': Brand.objects.all().order_by('name'), 'cartitems': cookiecart(self.request)['cartitems']}
         return data
 
 
@@ -64,7 +70,7 @@ class ProductByCategoryView(DetailView):
     def get_context_data(self, **kwargs):
         data = {'products': self.get_object(),
                 'categories': Category.objects.all().order_by('name'),
-                'brands': Brand.objects.all().order_by('name'), 'cartItems': cookiecart(self.request)['cartitems']}
+                'brands': Brand.objects.all().order_by('name'), 'cartitems': cookiecart(self.request)['cartitems']}
         return data
 
 
@@ -79,7 +85,7 @@ class ProductByBrandView(DetailView):
     def get_context_data(self, **kwargs):
         data = {'products': self.get_object(),
                 'categories': Category.objects.all().order_by('name'),
-                'brands': Brand.objects.all().order_by('name'), 'cartItems': cookiecart(self.request)['cartitems']}
+                'brands': Brand.objects.all().order_by('name'), 'cartitems': cookiecart(self.request)['cartitems']}
         return data
 
 
@@ -92,7 +98,7 @@ class CartView(TemplateView):
         for item in cookiecart(self.request)['items']:
             total += int(item.get('get_total'))
             product_id = item.get('product').get('id')
-        data = {'cartItems': cookiecart(self.request)['cartitems'], "items": cookiecart(self.request)['items'],
+        data = {'cartitems': cookiecart(self.request)['cartitems'], "items": cookiecart(self.request)['items'],
                 "product_id": product_id}
         return data
 
@@ -108,7 +114,7 @@ class CheckoutView(TemplateView):
             total += int(item.get('get_total'))
             product_id = item.get('product').get('id')
         data = {"user": self.request.user,
-                "cartItems": cookiecart(self.request)['cartitems'], "items": cookiecart(self.request)['items'],
+                "cartitems": cookiecart(self.request)['cartitems'], "items": cookiecart(self.request)['items'],
                 "stripe_publishable_key": STRIPE_PUBLISHABLE_KEY,
                 "sum": total,
                 "product_id": product_id
@@ -183,12 +189,12 @@ class PaymentSuccessView(TemplateView):
             obj.qty = avai
             obj.save()
 
-        return render(request, self.template_name, context={"cartItems": cookiecart(self.request)['cartitems']})
+        return render(request, self.template_name, context={"cartitems": cookiecart(self.request)['cartitems']})
 
 
 class PaymentFailedView(TemplateView):
     template_name = "payment_failed.html"
 
     def get_context_data(self, **kwargs):
-        data = {"cartItems": cookiecart(self.request)['cartitems']}
+        data = {"cartitems": cookiecart(self.request)['cartitems']}
         return data
