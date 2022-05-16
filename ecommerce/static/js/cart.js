@@ -21,10 +21,18 @@ function input_change() {
     var action = $(".update-cart").data('action')
     var price = $(".update-cart").data('price')
 
-    cart[productId]["quantity"] = parseInt(document.getElementById("sst").value)
-    delete cart[productId]
+    if (action == "add") {
+        cart[productId]["quantity"] = parseInt(document.getElementById("sst").value)
+    } else {
+        cart[productId]["quantity"] = parseInt(document.getElementById("sst").value)
+        delete cart[productId]
+
+
+    }
     document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
     location.reload()
+
+
 }
 
 
