@@ -77,7 +77,7 @@ DATABASES = {
     }
 }
 
-# TODO afjust change order uppoer box design and iother issues and cart count css
+# TODO  just change order uppoer box design and iother issues and cart count css
 # stripe keys issue mentioniin readme
 # video capture
 # current cookiecart functiomn issue

@@ -7,7 +7,7 @@ from django.views.generic import RedirectView
 urlpatterns = [
                   path('users/', include('users.urls')),
                   path('shop/', include('store.urls')),
-                  path('', RedirectView.as_view(pattern_name='login', permanent=False))
+                  path('', RedirectView.as_view(pattern_name='home', permanent=False))
 
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

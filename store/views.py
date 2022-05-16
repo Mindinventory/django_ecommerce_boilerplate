@@ -87,6 +87,8 @@ class CartView(TemplateView):
     template_name = "cart.html"
 
     def get_context_data(self, **kwargs):
+        total = 0
+        product_id = 0
         for item in cookiecart(self.request)['items']:
             total += int(item.get('get_total'))
             product_id = item.get('product').get('id')

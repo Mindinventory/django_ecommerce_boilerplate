@@ -7,17 +7,17 @@ from store.views import HomeView, ProductDetailView, CategoryView, CartView, \
     PaymentFailedView
 
 urlpatterns = [
-    path('', login_required(HomeView.as_view(), login_url='login'), name='home'),
-    path('product/<int:pk>/', login_required(ProductDetailView.as_view(), login_url='login'), name='product_detail'),
-    path('categories/', login_required(CategoryView.as_view(), login_url='login'), name='categories'),
-    path('brand/<int:pk>/product/', login_required(ProductByBrandView.as_view(), login_url='login'),
+    path('', HomeView.as_view(), name='home'),
+    path('product/<int:pk>/', ProductDetailView.as_view(), name='product_detail'),
+    path('categories/', CategoryView.as_view(), name='categories'),
+    path('brand/<int:pk>/product/', ProductByBrandView.as_view(),
          name='product_by_brand'),
-    path('category/<int:pk>/category/', login_required(ProductByCategoryView.as_view(), login_url='login'),
+    path('category/<int:pk>/category/', ProductByCategoryView.as_view(),
          name='product_by_category'),
-    path('cart/', login_required(CartView.as_view(),login_url='login'), name='cart'),
-    path('checkout/', CheckoutView.as_view(), name='checkout'),
+    path('cart/', CartView.as_view(), name='cart'),
+    path('checkout/',CheckoutView.as_view(), name='checkout'),
     path('api/checkout-session/<int:pk>/', Createcheckoutsession.as_view(), name='api_checkout_session'),
     path('success/', PaymentSuccessView.as_view(), name='success'),
     path('failed/', PaymentFailedView.as_view(), name='failed'),
-    path('confirmation/', ConfirmationView.as_view(), name='confirmation'),
+    path('confirmation/',  login_required(ConfirmationView.as_view(), login_url="login"), name='confirmation'),
 ]
