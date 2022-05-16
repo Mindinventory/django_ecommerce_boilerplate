@@ -20,7 +20,7 @@ class UserRegisterForm(UserCreationForm):
     mobile_no = forms.CharField(min_length=12, max_length=15, required=False, widget=forms.TextInput(
         attrs={"class": 'form-control', 'placeholder': 'Mobile no'}))
     alt_mobile_no = forms.CharField(min_length=12, max_length=15, required=False, widget=forms.TextInput(
-        attrs={"class": 'form-control', 'placeholder': 'Mobile no'}))
+        attrs={"class": 'form-control', 'placeholder': 'Alternate Mobile no'}))
 
     class Meta:
         model = User

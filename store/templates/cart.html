@@ -59,7 +59,7 @@
                                 <td>
                                     <div class="product_count">
                                         <input type="text" name="qty" id="sst" maxlength="12"
-                                               value="{{ item.quantity }}"
+                                               value="{{ item.quantity }}" onchange="input_change()"
                                                title="Quantity:" class="input-text qty">
                                         <button class='update-cart increase items-count' data-id="{{ item.product.id }}"
                                                 data-action='add' data-image="{{ item.product.image }}"

@@ -14,7 +14,18 @@ for (var i = 0; i < updateBtns.length; i++) {
     })
 }
 
+function input_change() {
 
+    var productId = $(".update-cart").data('id')
+    var image = $(".update-cart").data('image')
+    var action = $(".update-cart").data('action')
+    var price = $(".update-cart").data('price')
+
+    cart[productId]["quantity"] = parseInt(document.getElementById("sst").value)
+    delete cart[productId]
+    document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
+    location.reload()
+}
 
 
 function addCookieItem(productId, image, price, action) {
@@ -27,7 +38,7 @@ function addCookieItem(productId, image, price, action) {
         }
     }
 
-    if (action == 'remove') {
+    if (action === 'remove') {
         cart[productId]['quantity'] -= 1
 
         if (cart[productId]['quantity'] <= 0) {
@@ -37,7 +48,7 @@ function addCookieItem(productId, image, price, action) {
     }
     console.log('Cart:', cart)
     document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
-    // location.reload()
+    location.reload()
 
 }
 
