@@ -24,7 +24,7 @@ class UserRegisterForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ["username", "password1", "password2","mobile_no"]
+        fields = ["username", "password1", "password2", "mobile_no"]
 
 
 class LoginForm(AuthenticationForm):

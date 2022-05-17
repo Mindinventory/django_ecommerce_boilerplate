@@ -18,7 +18,7 @@ class HomeView(ListView):
     model = Product
 
     def get_queryset(self, *args, **kwargs):
-        qs = super(HomeView, self).get_queryset(*args, **kwargs)
+        qs = super(HomeView, self).get_queryset()
         qs = qs.order_by("name")
         return qs
 

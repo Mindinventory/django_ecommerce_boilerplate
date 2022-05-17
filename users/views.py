@@ -1,6 +1,5 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout, update_session_auth_hash
-from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
@@ -8,7 +7,7 @@ from ecommerce.settings import EMAIL_HOST_USER
 from store.tasks import send_reset_email_task
 from users.forms import UserRegisterForm, EditProfileForm, LoginForm, ForgotPasswordForm, \
     ResetPasswordForm, ChangePasswordForm
-from users.models import Profile, ShippingAddress, ForgotPassword
+from users.models import Profile, ShippingAddress, ForgotPassword, User
 from ecommerce import logger
 from store.utils import cookiecart
 
@@ -40,13 +39,15 @@ def login(request):
         Logs in the user in the system after successfully registered and redirects to home page.
     """
     try:
-
         form = LoginForm(request=request, data=request.POST or None)
         if form.is_valid():
             user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
             if user is not None:
                 auth_login(request, user)
                 logger.info("User with name {0} logged in successfully".format(user.username))
+                # After login, redirects to specified page in the URL.
+                if "next" in request.GET:
+                    return redirect(request.GET.get('next'))
                 return redirect("home")
             logger.info("User entered invalid login credentials")
             messages.error(request, message="Invalid login credentials")
@@ -117,7 +118,7 @@ def change_password(request):
             # Updates password in current session and logs out current user from all other sessions
             update_session_auth_hash(request, request.user)
             logger.info("Password of user with name {0} changed successfully".format(request.user.username))
-            return redirect('login')
+            return redirect('home')
         return render(request, "change_password.html",
                       {"form": form, "cartitems": cookiecart(request)['cartitems']})
     except Exception as ex:
