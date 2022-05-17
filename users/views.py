@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout, update_session_auth_hash
+from django.contrib.auth import login as auth_login, logout as auth_logout, update_session_auth_hash
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
@@ -41,20 +41,13 @@ def login(request):
     try:
         form = LoginForm(request=request, data=request.POST or None)
         if form.is_valid():
-            user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
-            if user is not None:
-                auth_login(request, user)
-                logger.info("User with name {0} logged in successfully".format(user.username))
-                # After login, redirects to specified page in the URL.
-                if "next" in request.GET:
-                    return redirect(request.GET.get('next'))
-                return redirect("home")
-            logger.info("User entered invalid login credentials")
-            messages.error(request, message="Invalid login credentials")
-            return render(request, template_name="login.html",
-                          context={'form': form, "cartitems": cookiecart(request)['cartitems']})
-        if form.errors:
-            messages.error(request, message="Invalid login credentials")
+            auth_login(request, form.get_user())
+            # After login, redirects to specified page in the URL.
+            if "next" in request.GET:
+                return redirect(request.GET.get('next'))
+            logger.info("User with name {0} logged in successfully".format(form.get_user()))
+            return redirect("home")
+        logger.info("User entered invalid login credentials")
         return render(request, "login.html", {"form": form, "cartitems": cookiecart(request)['cartitems']})
     except Exception as ex:
         logger.info("Exception raised in logging in  user -- {0}".format(ex.args))

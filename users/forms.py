@@ -1,9 +1,10 @@
 from django import forms
-from django.contrib.auth import password_validation
+from django.contrib.auth import password_validation,authenticate
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, \
     SetPasswordForm, AuthenticationForm
 from users.models import User
 from django.core.exceptions import ValidationError
+from django.contrib import messages
 
 
 class UserRegisterForm(UserCreationForm):
@@ -34,12 +35,34 @@ class LoginForm(AuthenticationForm):
     """
         A form that allows user to login with correct username and password.
     """
+    error_messages = {
+        "invalid_login":
+            "Please enter a correct username and password."
+        ,
+        "inactive": "This account is inactive.",
+    }
+
     username = forms.CharField(
-        widget=forms.TextInput(attrs={"class": 'form-control', 'placeholder': 'Username'}))
+        widget=forms.TextInput(attrs={"class": 'form-control', 'placeholder': 'Username or Email'}))
     password = forms.CharField(strip=False,
                                widget=forms.PasswordInput(
                                    attrs={'autocomplete': 'current-password', "class": 'form-control',
                                           'placeholder': 'Password'}))
+
+    def clean(self):
+        username = self.cleaned_data.get("username")
+        password = self.cleaned_data.get("password")
+
+        if username is not None and password:
+            self.user_cache = authenticate(
+                self.request, username=username, password=password
+            )
+            if self.user_cache is None:
+                messages.error(self.request, "Invalid login credentials")
+            else:
+                self.confirm_login_allowed(self.user_cache)
+
+        return self.cleaned_data
 
 
 class EditProfileForm(forms.Form):

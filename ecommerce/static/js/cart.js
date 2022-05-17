@@ -14,21 +14,15 @@ for (var i = 0; i < updateBtns.length; i++) {
     })
 }
 
-function input_change() {
+function input_change(value, data_id) {
 
-    var productId = $(".update-cart").data('id')
-    var image = $(".update-cart").data('image')
-    var action = $(".update-cart").data('action')
-    var price = $(".update-cart").data('price')
 
-    if (action == "add") {
-        cart[productId]["quantity"] = parseInt(document.getElementById("sst").value)
+    if (parseInt(value) <= 0) {
+        delete cart[data_id]
     } else {
-        cart[productId]["quantity"] = parseInt(document.getElementById("sst").value)
-        delete cart[productId]
-
-
+        cart[data_id]["quantity"] = parseInt(value)
     }
+
     document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
     location.reload()
 
