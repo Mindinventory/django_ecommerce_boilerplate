@@ -16,7 +16,10 @@ class UserRegisterForm(UserCreationForm):
                                 widget=forms.PasswordInput(
                                     attrs={'autocomplete': 'current-password', "class": 'form-control',
                                            'placeholder': 'Password'}))
-    password2 = forms.CharField(required=False)
+    password2 = forms.CharField(strip=False,
+                                widget=forms.PasswordInput(
+                                    attrs={'autocomplete': 'new-password', "class": 'form-control',
+                                           'placeholder': 'Confirm Password'}))
     mobile_no = forms.CharField(min_length=12, max_length=15, required=False, widget=forms.TextInput(
         attrs={"class": 'form-control', 'placeholder': 'Mobile no'}))
     alt_mobile_no = forms.CharField(min_length=12, max_length=15, required=False, widget=forms.TextInput(
@@ -24,7 +27,7 @@ class UserRegisterForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ["username", "password1", "password2", "mobile_no"]
+        fields = ["username", "password1", "password2", "mobile_no", "alt_mobile_no"]
 
 
 class LoginForm(AuthenticationForm):
