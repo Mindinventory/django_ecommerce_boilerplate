@@ -12,7 +12,7 @@ class UserRegisterForm(UserCreationForm):
         A form that creates a user, with no privileges.
     """
     username = forms.CharField(
-        widget=forms.TextInput(attrs={"class": 'form-control', 'placeholder': 'Username'}))
+        widget=forms.TextInput(attrs={"class": 'form-control', 'placeholder': 'Email'}))
     password1 = forms.CharField(strip=False,
                                 widget=forms.PasswordInput(
                                     attrs={'autocomplete': 'current-password', "class": 'form-control',
@@ -43,7 +43,7 @@ class LoginForm(AuthenticationForm):
     }
 
     username = forms.CharField(
-        widget=forms.TextInput(attrs={"class": 'form-control', 'placeholder': 'Username or Email'}))
+        widget=forms.TextInput(attrs={"class": 'form-control', 'placeholder': 'Email'}))
     password = forms.CharField(strip=False,
                                widget=forms.PasswordInput(
                                    attrs={'autocomplete': 'current-password', "class": 'form-control',
@@ -74,7 +74,7 @@ class EditProfileForm(forms.Form):
                                                               }))
     username = forms.CharField(max_length=150,
                                widget=forms.TextInput(
-                                   attrs={"class": 'form-control', 'placeholder': 'Username'}))
+                                   attrs={"class": 'form-control', 'placeholder': 'Email'}))
     mobile_no = forms.CharField(min_length=12, max_length=15, required=False, widget=forms.TextInput(
         attrs={"class": 'form-control', 'placeholder': 'Mobile no'}))
     alt_mobile_no = forms.CharField(min_length=12, max_length=15, required=False, widget=forms.TextInput(
