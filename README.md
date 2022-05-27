@@ -1,5 +1,16 @@
 # **E-commerce**
 
+<a href="https://docs.python.org/3.10/" style="pointer-events: stroke;" target="_blank">
+<img src="https://img.shields.io/badge/python-3.10-yellowgreen">
+</a>
+<a href="https://pip.pypa.io/en/stable/" style="pointer-events: stroke;" target="_blank">
+<img src="https://img.shields.io/badge/pip%20-22.0-orange">
+</a>
+<a href="https://docs.djangoproject.com/en/4.0/" style="pointer-events: stroke;" target="_blank">
+<img src="https://img.shields.io/badge/django%20-4.0.4-red">
+</a>
+<br/><br/>
+
 A web application built in Django for purchasing products online.
 
 ## **Project setup**
