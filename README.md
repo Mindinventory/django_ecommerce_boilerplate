@@ -1,4 +1,4 @@
-# **E-commerce**
+# **E-commerce Web application Using Django**
 
 <a href="https://docs.python.org/3.10/" style="pointer-events: stroke;" target="_blank">
 <img src="https://img.shields.io/badge/python-3.10-yellowgreen">
