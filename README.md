@@ -7,7 +7,7 @@ A web application built in Django for purchasing products online.
 Clone the repository:
 
 ````
-$ git clone https://github.com/rutvi-mi/django_ecommerce_boilerplate.git
+$ git clone https://github.com/Mindinventory/django_ecommerce_boilerplate.git
 ````
 
 Create virtual environment:
